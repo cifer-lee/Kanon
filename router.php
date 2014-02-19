@@ -35,23 +35,78 @@ require 'route.php';
 
 class Router {
 
+    /**
+     * @var array The routes maintained in this router
+     */
     private $routes;
 
     public function __construct() {
         $routes = array();
     }
 
+    /*
     public function add_route($pattern, $callable) {
         $route = new \Kanon\Route($pattern, $callable);
         $this->routes[] = $route;
     }
+     */
 
-    public function find_route($source) {
-        //var_dump($this->routes);
+
+    /**
+     * Add a new route to this router. 
+     *
+     * Parameters:
+     *
+     * First:   string  The URL pattern (required)
+     * Second:  string  The HTTP method supported by the new route (required)
+     * Third:   array   The controller and action associated (optional)
+     * Forth:   array   The parameters's pattern in URL pattern (optional)
+     *
+     */
+    public function add_route() {
+        $args = func_get_args();
+
+        $pattern = $args[0];
+        $method = strtoupper($args[1]);
+        $handler = $args[2];
+
+        $handler_default = array('controller' => 'index', 'action' => 'index');
+        $handler = array_merge($handler_default, $handler);
+
+        if(isset($args[3])) {
+            $pattern = convert_url_pattern($pattern, ':', $args[3]);
+        }
+
+        $pattern = '#^' . $pattern . '$#';
+
+        $route = new \Kanon\Route($pattern, $method, $handler);
+        $this->routes[] = $route;
+    }
+
+    public function find_route($source, $method) {
         foreach ($this->routes as $route) {
-            if ($route->matches($source)) {
+            if ($route->matches($source) && !strcasecmp($route->http_method(), $method)) {
                 return $route;
             }
         }
+
+        return NULL;
+    }
+
+    /**
+     * Convert a URL parameter (e.g. ":id", ":id+") into a regular expression
+     *
+     * @param   source          string
+     * @param   marker          string
+     * @param   replacements    array
+     *
+     * @return  string          
+     */ 
+    private function convert_url_pattern($source, $marker, $replacements) {
+        foreach($replacements as $key => $value) {
+            $source = str_replace($marker . $key, '(' . $value . ')', $source);
+        }
+
+        return $source;
     }
 }

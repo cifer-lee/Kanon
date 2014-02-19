@@ -39,13 +39,35 @@ class Route {
     private $pattern;
 
     /**
-     * @var mixed The route handler
+     * @var string The route controller
      */
-    private $handler;
+    private $controller_name;
 
-    public function __construct($pattern, $handler) {
+    /**
+     * @var string The route action in controller
+     */
+    private $action_name;
+    /**
+     * @var string The route view 
+     */
+    private $view_name;
+    /**
+     * @var string The route model
+     */
+    private $model_name;
+
+    /**
+     * @var string The http_method supported by this route
+     */
+    private $http_method;
+
+    public function __construct($pattern, $method, $handler) {
         $this->pattern = $pattern;
-        $this->handler = $handler;
+        $this->http_method = $method;
+        $this->controller_name = $handler['controller'];
+        $this->view_name = $handler['controller'];
+        $this->model_name = $handler['controller'];
+        $this->action_name = $handler['action'];
     }
 
     public function matches($url) {
@@ -54,8 +76,23 @@ class Route {
         }
     }
 
+    public function http_method() {
+        return $this->http_method;
+    }
+
     public function dispatch() {
-        return call_user_func($this->handler);
-        //return {$this->handler}();
+        require "{$this->controller_name}_controller.php";
+        require "{$this->view_name}_view.php";
+        require "{$this->model_name}_model.php";
+
+        $controller_class_name = ucfirst($this->controller_name) . 'Controller';
+        $view_class_name = ucfirst($this->view_name) . 'View';
+        $model_class_name = ucfirst($this->model_name) . 'Model';
+
+        $model = new $model_class_name();
+        $controller = new $controller_class_name($model);
+        $view = new $view_class_name($model);
+
+        return $controller->{$this->action_name}();
     }
 }
