@@ -17,4 +17,16 @@ class View {
             break;
         }
     }
+
+    public function render_get() {
+    }
+
+    public function render_post() {
+    }
+
+    public function render_put() {
+    }
+
+    public function render_delete() {
+    }
 }

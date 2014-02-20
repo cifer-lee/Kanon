@@ -1,6 +1,6 @@
 <?php
 
-class PanelsModel extends Model{
+class PanelsModel extends Model {
     private $panels;
     private $new_panel_id;
 
