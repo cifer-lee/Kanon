@@ -14,9 +14,14 @@ class PanelView extends View {
         echo $source;
     }
 
-    public function render_put() {
-        $new_panel_uuid = $this->model->get_new_panel_uuid();
-        $resbody = array('success' => array('uri' => "/controllers", 'desc' => "$new_panel_uuid"));
+    public function render_put($params) {
+        $status = $this->model->get_status();
+
+        if($status) {
+            $resbody = array('success' => array('uri' => "/controllers/{$params[0]}", 'desc' => ""));
+        } else {
+            $resbody = array('failure' => array('uri' => "/controllers/{$params[0]}", 'desc' => ""));
+        }
 
         $source = json_encode($resbody);
         echo $source;

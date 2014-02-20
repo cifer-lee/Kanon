@@ -22,7 +22,7 @@ class PanelsController extends Controller {
     public function create_panel() {
         if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json') {
             $reqbody = file_get_contents('php://input');
-            $panel = json_decode($reqbody);
+            $panel = json_decode($reqbody, true);
 
             $this->model->create_panel($panel);
         } else {

@@ -105,6 +105,6 @@ class Route {
         $view = new $view_class_name($model);
 
         $controller->{$this->action_name}($this->params);
-        $view->render();
+        $view->render($this->params);
     }
 }

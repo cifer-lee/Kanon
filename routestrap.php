@@ -25,3 +25,12 @@ $router->add_route('/api/controllers/:controller_id', 'GET',
         'controller_id' => '[0-9]+'
     )
 );
+
+$router->add_route('/api/controllers/:controller_id', 'PUT', 
+    array(
+        'controller' => 'panel',
+        'action' => 'panel_update'), 
+    array(
+        'controller_id' => '[0-9]+'
+    )
+);

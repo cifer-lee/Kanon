@@ -18,5 +18,19 @@ class PanelController extends Controller {
     }
 
     public function panel_update() {
+        $args = func_get_args();
+        $params = $args[0];
+
+        if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json') {
+            $reqbody = file_get_contents('php://input');
+            $panel = json_decode($reqbody, true);
+
+            $panel['uuid'] = $params[0];
+
+            $this->model->panel_update($panel);
+        } else {
+            header('HTTP/1.1 415 Unsupported Media Type');
+            die();
+        }
     }
 }
