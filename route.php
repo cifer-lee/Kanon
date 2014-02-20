@@ -61,6 +61,11 @@ class Route {
      */
     private $http_method;
 
+    /**
+     * @var array The parameters extracted from the url
+     */
+    private $params;
+
     public function __construct($pattern, $method, $handler) {
         $this->pattern = $pattern;
         $this->http_method = $method;
@@ -71,7 +76,10 @@ class Route {
     }
 
     public function matches($url) {
-        if (preg_match($this->pattern, $url)) {
+        if (preg_match($this->pattern, $url, $this->params)) {
+            /* 
+             * pop the first param which is the url passed in */
+            array_shift($this->params);
             return TRUE;
         }
     }
@@ -80,6 +88,9 @@ class Route {
         return $this->http_method;
     }
 
+    /**
+     * Dispatch this route
+     */
     public function dispatch() {
         require "{$this->controller_name}_controller.php";
         require "{$this->view_name}_view.php";
@@ -93,7 +104,7 @@ class Route {
         $controller = new $controller_class_name($model);
         $view = new $view_class_name($model);
 
-        $controller->{$this->action_name}();
+        $controller->{$this->action_name}($this->params);
         $view->render();
     }
 }
