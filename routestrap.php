@@ -7,8 +7,7 @@ $router->add_route('/', 'GET', array(
     'action' => 'index')
 );
 
-$router->add_route('/panels', 'GET', array(
+$router->add_route('/api/controllers', 'GET', array(
     'controller' => 'panels',
     'action' => 'get_panels')
 );
-

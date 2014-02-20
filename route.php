@@ -93,6 +93,7 @@ class Route {
         $controller = new $controller_class_name($model);
         $view = new $view_class_name($model);
 
-        return $controller->{$this->action_name}();
+        $controller->{$this->action_name}();
+        $view->render();
     }
 }

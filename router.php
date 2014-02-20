@@ -44,14 +44,6 @@ class Router {
         $routes = array();
     }
 
-    /*
-    public function add_route($pattern, $callable) {
-        $route = new \Kanon\Route($pattern, $callable);
-        $this->routes[] = $route;
-    }
-     */
-
-
     /**
      * Add a new route to this router. 
      *
@@ -83,6 +75,14 @@ class Router {
         $this->routes[] = $route;
     }
 
+    /**
+     * Find a route, based on the http method and url pattern
+     *
+     * @param   source      string      The url
+     * @param   method      string      The HTTP method
+     *
+     * @return  The route on success, NULL on failure
+     */
     public function find_route($source, $method) {
         foreach ($this->routes as $route) {
             if ($route->matches($source) && !strcasecmp($route->http_method(), $method)) {

@@ -14,7 +14,6 @@ class PanelsController extends Controller {
      * get all panels
      */
     public function get_panels() {
-        echo 'hello world';
     }
 
     /**
