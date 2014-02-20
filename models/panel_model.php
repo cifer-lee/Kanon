@@ -7,7 +7,8 @@ class PanelModel extends Model {
     private $panel;
 
     /**
-     * @var boolean The status specifies whether operation was succeed
+     * @var boolean The status specifies whether operation was succeed.
+     *  
      */
     private $status;
 
@@ -29,6 +30,13 @@ class PanelModel extends Model {
      * @param $panel array  The panel's new information
      */
     public function panel_update($panel) {
+        $this->status = true;
+    }
+
+    /**
+     * Build relationships between panel buttons and scenes.
+     */
+    public function panel_configure($configure) {
         $this->status = true;
     }
 

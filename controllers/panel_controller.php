@@ -33,4 +33,26 @@ class PanelController extends Controller {
             die();
         }
     }
+
+    /**
+     * Build relationships between panel buttons and scenes.
+     */
+    public function panel_configure() {
+        $args = func_get_args();
+        $params = $args[0];
+
+        if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json') {
+            $reqbody = file_get_contents('php://input');
+            $configure = json_decode($reqbody, true);
+
+            $configure['uuid'] = $params[0];
+
+            var_dump($configure);
+
+            $this->model->panel_configure($configure);
+        } else {
+            header('HTTP/1.1 415 Unsupported Media Type');
+            die();
+        }
+    }
 }

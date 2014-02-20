@@ -34,3 +34,12 @@ $router->add_route('/api/controllers/:controller_id', 'PUT',
         'controller_id' => '[0-9]+'
     )
 );
+
+$router->add_route('/api/controllers/:controller_id/configure', 'POST',
+    array(
+        'controller' => 'panel',
+        'action' => 'panel_configure'),
+    array(
+        'controller_id' => '[0-9]+'
+    )
+);
