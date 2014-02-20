@@ -29,5 +29,10 @@ class PanelsView extends View {
     }
 
     public function render_post() {
+        $new_panel_uuid = $this->model->get_new_panel_uuid();
+        $resbody = array('success' => array('uri' => "/controllers", 'desc' => "$new_panel_uuid"));
+
+        $source = json_encode($resbody);
+        echo $source;
     }
 }

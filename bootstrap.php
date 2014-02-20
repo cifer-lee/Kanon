@@ -17,5 +17,3 @@ define ('HTTP_METHOD_GET', 'GET');
 define ('HTTP_METHOD_POST', 'POST');
 define ('HTTP_METHOD_PUT', 'PUT');
 define ('HTTP_METHOD_DELETE', 'DELETE');
-
-error_reporting(E_ALL);

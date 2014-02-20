@@ -11,3 +11,8 @@ $router->add_route('/api/controllers', 'GET', array(
     'controller' => 'panels',
     'action' => 'get_panels')
 );
+
+$router->add_route('/api/controllers', 'POST', array(
+    'controller' => 'panels',
+    'action' => 'create_panel')
+);

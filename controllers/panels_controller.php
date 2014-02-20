@@ -20,5 +20,14 @@ class PanelsController extends Controller {
      * create a panel
      */
     public function create_panel() {
+        if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json') {
+            $reqbody = file_get_contents('php://input');
+            $panel = json_decode($reqbody);
+
+            $this->model->create_panel($panel);
+        } else {
+            header('HTTP/1.1 415 Unsupported Media Type');
+            die();
+        }
     }
 }
