@@ -66,7 +66,7 @@ class Router {
         $handler = array_merge($handler_default, $handler);
 
         if(isset($args[3])) {
-            $pattern = convert_url_pattern($pattern, ':', $args[3]);
+            $pattern = $this->convert_url_pattern($pattern, ':', $args[3]);
         }
 
         $pattern = '#^' . $pattern . '$#';
