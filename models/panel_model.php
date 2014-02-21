@@ -37,7 +37,12 @@ class PanelModel extends Model {
      * Build relationships between panel buttons and scenes.
      */
     public function panel_configure($configure) {
-        $this->status = true;
+        foreach($configure['buttons'] as $value) {
+            foreach($value as $btn_id => $scene_id) {
+                $this->status[] = array('success' => array('uri' => "/controllers/{$configure['uuid']}/buttons/{$btn_id}", 'desc' => "{$scene_id}"));
+            }
+        }
+        //$this->status = array('button1' => true, 'button2' => false);
     }
 
     /**

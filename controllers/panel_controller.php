@@ -47,8 +47,6 @@ class PanelController extends Controller {
 
             $configure['uuid'] = $params[0];
 
-            var_dump($configure);
-
             $this->model->panel_configure($configure);
         } else {
             header('HTTP/1.1 415 Unsupported Media Type');
