@@ -95,3 +95,23 @@ $router->add_route('/api/lights/:light_uuid', 'PUT',
         'light_uuid' => '[0-9]+'
     )
 );
+
+$router->add_route('/api/lights/:light_uuid/state', 'GET',
+    array(
+        'controller' => 'light_state',
+        'action' => 'light_state_read'
+    ),
+    array(
+        'light_uuid' => '[0-9]+'
+    )
+);
+
+$router->add_route('/api/lights/:light_uuid/state', 'PUT',
+    array(
+        'controller' => 'light_state',
+        'action' => 'light_state_update'
+    ),
+    array(
+        'light_uuid' => '[0-9]+'
+    )
+);
