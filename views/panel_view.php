@@ -14,6 +14,9 @@ class PanelView extends View {
         echo $source;
     }
 
+    public function render_post() {
+    }
+
     public function render_put($params) {
         $status = $this->model->get_status();
 

@@ -5,11 +5,10 @@ class PanelsModel extends Model {
     private $new_panel_id;
 
     public function __construct() {
-        $this->panels[] = array('controller1' => array('button1', 'button2', 'button3'));
-        $this->panels[] = array('controller2' => array('button1', 'button2', 'button3', 'button4'));
     }
 
     public function get_all_panels() {
+        $this->panels = array('controller1' => array('buttons' => array('button1' => '', 'button2' => '', 'button3' => '')), 'controller2' => array('buttons' => array('button1' => '', 'button2' => '')));
         return $this->panels;
     }
 

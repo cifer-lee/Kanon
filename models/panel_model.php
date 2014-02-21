@@ -21,7 +21,7 @@ class PanelModel extends Model {
      * @return no return value
      */
     public function panel_info($panel_uuid) {
-        $this->panel = array('button1', 'button2', 'button3');
+        $this->panel = array('buttons' => array('button1' => '', 'button2' => '', 'button3' => ''));
     }
 
     /**
