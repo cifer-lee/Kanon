@@ -96,9 +96,9 @@ class Route {
         require "{$this->view_name}_view.php";
         require "{$this->model_name}_model.php";
 
-        $controller_class_name = ucfirst($this->controller_name) . 'Controller';
-        $view_class_name = ucfirst($this->view_name) . 'View';
-        $model_class_name = ucfirst($this->model_name) . 'Model';
+        $controller_class_name = $this->underscore_to_camelcase($this->controller_name) . 'Controller';
+        $view_class_name = $this->underscore_to_camelcase($this->view_name) . 'View';
+        $model_class_name = $this->underscore_to_camelcase($this->model_name) . 'Model';
 
         $model = new $model_class_name();
         $controller = new $controller_class_name($model);
@@ -106,5 +106,17 @@ class Route {
 
         $controller->{$this->action_name}($this->params);
         $view->render($this->params);
+    }
+
+    public function underscore_to_camelcase($source) {
+        $source = ucfirst($source);
+        $pos = 0;
+        while(($pos = strpos($source, '_', $pos))) {
+            $source[$pos + 1] = strtoupper($source[$pos + 1]);
+            $pos++;
+        }
+
+        $source = str_replace('_', '', $source);
+        return $source;
     }
 }
