@@ -61,3 +61,17 @@ $router->add_route('/api/bridge', 'GET',
         'action' => 'get_configuration'
     )
 );
+
+$router->add_route('/api/lights', 'GET',
+    array(
+        'controller' => 'lights',
+        'action' => 'lights_read'
+    )
+);
+
+$router->add_route('/api/lights/search', 'GET',
+    array(
+        'controller' => 'lights',
+        'action' => 'lights_search'
+    )
+);
