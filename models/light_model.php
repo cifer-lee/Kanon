@@ -45,6 +45,15 @@ class LightModel extends Model {
         ));
     }
 
+    public function light_delete($light_uuid) {
+        $this->status = array(
+            'success' => array(
+                'uri' => "/lights/{$light_uuid}",
+                'desc' => "{$light_uuid}"
+            )
+        );
+    }
+
     /**
      * Used by LightsView to get the current panel info
      *

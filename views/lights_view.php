@@ -13,4 +13,11 @@ class LightsView extends View {
 
         echo $source;
     }
+
+    public function render_post() {
+        $status = $this->model->get_status();
+        $source = json_encode($status);
+
+        echo $source;
+    }
 }

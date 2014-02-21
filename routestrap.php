@@ -76,6 +76,13 @@ $router->add_route('/api/lights/search', 'GET',
     )
 );
 
+$router->add_route('/api/lights/replace', 'POST',
+    array(
+        'controller' => 'lights',
+        'action' => 'lights_replace'
+    )
+);
+
 $router->add_route('/api/lights/:light_uuid', 'GET',
     array(
         'controller' => 'light',
@@ -110,6 +117,16 @@ $router->add_route('/api/lights/:light_uuid/state', 'PUT',
     array(
         'controller' => 'light_state',
         'action' => 'light_state_update'
+    ),
+    array(
+        'light_uuid' => '[0-9]+'
+    )
+);
+
+$router->add_route('/api/lights/:light_uuid', 'DELETE',
+    array(
+        'controller' => 'light',
+        'action' => 'light_delete'
     ),
     array(
         'light_uuid' => '[0-9]+'

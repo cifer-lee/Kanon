@@ -58,6 +58,15 @@ class LightsModel extends Model {
         ));
     }
 
+    public function lights_replace($lightids) {
+        $this->status = array(
+            'success' => array(
+                'uri' => '/lights/replace',
+                'desc' => "old light: {$lightids['uuid1']}, new light: {$lightids['uuid2']}"
+            )
+        );
+    }
+
     /**
      * Used by LightsView to get the current panel info
      *

@@ -36,4 +36,11 @@ class LightController extends Controller {
             die();
         }
     }
+
+    public function light_delete() {
+        $args = func_get_args();
+        $params = $args[0];
+
+        $this->model->light_delete($params[0]);
+    }
 }
