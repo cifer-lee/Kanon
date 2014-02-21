@@ -75,3 +75,23 @@ $router->add_route('/api/lights/search', 'GET',
         'action' => 'lights_search'
     )
 );
+
+$router->add_route('/api/lights/:light_uuid', 'GET',
+    array(
+        'controller' => 'light',
+        'action' => 'light_read'
+    ),
+    array(
+        'light_uuid' => '[0-9]+'
+    )
+);
+
+$router->add_route('/api/lights/:light_uuid', 'PUT',
+    array(
+        'controller' => 'light',
+        'action' => 'light_update'
+    ),
+    array(
+        'light_uuid' => '[0-9]+'
+    )
+);
