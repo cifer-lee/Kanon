@@ -54,3 +54,10 @@ $router->add_route('/api/controllers/:controller_id/buttons/:button_id/active', 
         'button_id' => '[0-9]+'
     )
 );
+
+$router->add_route('/api/bridge', 'GET', 
+    array(
+        'controller' => 'configuration',
+        'action' => 'get_configuration'
+    )
+);
