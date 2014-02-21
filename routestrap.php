@@ -43,3 +43,14 @@ $router->add_route('/api/controllers/:controller_id/configure', 'POST',
         'controller_id' => '[0-9]+'
     )
 );
+
+$router->add_route('/api/controllers/:controller_id/buttons/:button_id/active', 'POST',
+    array(
+        'controller' => 'panel_button',
+        'action' => 'button_active'
+    ),
+    array(
+        'controller_id' => '[0-9]+',
+        'button_id' => '[0-9]+'
+    )
+);

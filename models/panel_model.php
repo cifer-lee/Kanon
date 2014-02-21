@@ -42,7 +42,6 @@ class PanelModel extends Model {
                 $this->status[] = array('success' => array('uri' => "/controllers/{$configure['uuid']}/buttons/{$btn_id}", 'desc' => "{$scene_id}"));
             }
         }
-        //$this->status = array('button1' => true, 'button2' => false);
     }
 
     /**
