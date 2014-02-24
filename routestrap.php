@@ -132,3 +132,86 @@ $router->add_route('/api/lights/:light_uuid', 'DELETE',
         'light_uuid' => '[0-9]+'
     )
 );
+
+$router->add_route('/api/maps', 'GET',
+    array(
+        'controller' => 'maps',
+        'action' => 'maps_read'
+    )
+);
+
+$router->add_route('/api/maps/:map_uuid/lights', 'GET',
+    array(
+        'controller' => 'maps_lights',
+        'action' => 'maps_lights_read'
+    ),
+    array(
+        'map_uuid' => '[0-9]+'
+    )
+);
+
+$router->add_route('/api/maps/:map_uuid/lights/:light_uuid', 'GET',
+    array(
+        'controller' => 'maps_light',
+        'action' => 'maps_light_read'
+    ),
+    array(
+        'map_uuid' => '[0-9]+',
+        'light_uuid' => '[0-9]+'
+    )
+);
+
+$router->add_route('/api/maps/:map_uuid/lights/:light_uuid', 'PUT',
+    array(
+        'controller' => 'maps_light',
+        'action' => 'maps_light_update'
+    ),
+    array(
+        'map_uuid' => '[0-9]+',
+        'light_uuid' => '[0-9]+'
+    )
+);
+
+$router->add_route('/api/scenes', 'GET',
+    array(
+        'controller' => 'scenes',
+        'action' => 'scenes_read'
+    )
+);
+
+$router->add_route('/api/scenes', 'POST',
+    array(
+        'controller' => 'scenes',
+        'action' => 'create_scene'
+    )
+);
+
+$router->add_route('/api/scenes/:scene_uuid', 'GET',
+    array(
+        'controller' => 'scene',
+        'action' => 'scene_read'
+    ),
+    array(
+        'scene_uuid' => '[0-9]+'
+    )
+);
+
+$router->add_route('/api/scenes/:scene_uuid/on', 'POST',
+    array(
+        'controller' => 'scene',
+        'action' => 'scene_active'
+    ),
+    array(
+        'scene_uuid' => '[0-9]+'
+    )
+);
+
+$router->add_route('/api/scenes/:scene_uuid/lights', 'GET',
+    array(
+        'controller' => 'scenes_lights',
+        'action' => 'scenes_lights_read'
+    ),
+    array(
+        'scene_uuid' => '[0-9]+'
+    )
+);
