@@ -20,10 +20,7 @@ class LightsModel extends Model {
         $res = $db->query('select * from lights');
 
         while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
-            $uuid = $light['uuid'];
-            array_shift($light);
-            array_shift($light);
-            $this->lights[$uuid] = $light;
+            $this->lights[] = $light;
         }
     }
 
@@ -32,10 +29,7 @@ class LightsModel extends Model {
         $res = $db->query('select * from lights where map_uuid = 0');
 
         while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
-            $uuid = $light['uuid'];
-            array_shift($light);
-            array_shift($light);
-            $this->lights[$uuid] = $light;
+            $this->lights[] = $light;
         }
     }
 

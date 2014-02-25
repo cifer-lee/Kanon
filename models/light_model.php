@@ -19,8 +19,6 @@ class LightModel extends Model {
         $db = new SQLite3('lighting-server.db');
         $res = $db->query("select * from lights where uuid = $light_uuid");
         if(($light = $res->fetchArray(SQLITE3_ASSOC))) {
-            array_shift($light);
-            array_shift($light);
             $this->light = $light;
         } else {
             $this->light = array();
@@ -38,25 +36,24 @@ class LightModel extends Model {
 update lights set name='{$origin['name']}', bri={$origin['bri']}, r={$origin['r']}, g={$origin['g']}, b={$origin['b']}, g2={$origin['g2']}, b2={$origin['b2']}, map_uuid={$origin['map_uuid']}, loc_x={$origin['loc_x']}, loc_y={$origin['loc_y']} where uuid={$origin['uuid']};
 EOD;
 
-            var_dump($source);
             $db->exec($source);
+
+            $sta = array(
+                'success' => array(
+                    'uri' => "/lights/{$light['uuid']}",
+                    'desc' => ""
+                )
+            );
         } else {
+            $sta = array(
+                'failure' => array(
+                    'uri' => "/lights/{$light['uuid']}",
+                    'desc' => "no such light"
+                )
+            );
         }
 
-        /*
-        $this->status = array(
-            array(
-                'success' => array(
-                    'uri' => "/lights/{$light['uuid']}/name",
-                    'desc' => "{$light['name']}"
-            )
-        ), array(
-            'success' => array(
-                'uri' => "lights/{$light['uuid']}/type",
-                'desc' => "{$light['type']}"
-            )
-        ));
-         */
+        $this->status = $sta;
     }
 
     public function light_delete($light_uuid) {
