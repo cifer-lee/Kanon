@@ -16,21 +16,34 @@ class LightModel extends Model {
     }
 
     public function light_read($light_uuid) {
-        $this->light = array(
-            'name' => 'light name 1',
-            'type' => 1,
-            'rssi' => 190,
-            'hwversion' => '2.0.1',
-            'state' => array(
-                'bri' => 250,
-                'r' => 255,
-                'g' => 0,
-                'b' => 0
-            )
-        );
+        $db = new SQLite3('lighting-server.db');
+        $res = $db->query("select * from lights where uuid = $light_uuid");
+        if(($light = $res->fetchArray(SQLITE3_ASSOC))) {
+            array_shift($light);
+            array_shift($light);
+            $this->light = $light;
+        } else {
+            $this->light = array();
+        }
     }
 
     public function light_update($light) {
+        $db = new SQLite3('lighting-server.db');
+        $res = $db->query("select * from lights where uuid = {$light['uuid']}");
+
+        if(($origin = $res->fetchArray(SQLITE3_ASSOC))) {
+            $origin = array_merge($origin, $light);
+
+            $source = <<<EOD
+update lights set name='{$origin['name']}', bri={$origin['bri']}, r={$origin['r']}, g={$origin['g']}, b={$origin['b']}, g2={$origin['g2']}, b2={$origin['b2']}, map_uuid={$origin['map_uuid']}, loc_x={$origin['loc_x']}, loc_y={$origin['loc_y']} where uuid={$origin['uuid']};
+EOD;
+
+            var_dump($source);
+            $db->exec($source);
+        } else {
+        }
+
+        /*
         $this->status = array(
             array(
                 'success' => array(
@@ -43,6 +56,7 @@ class LightModel extends Model {
                 'desc' => "{$light['type']}"
             )
         ));
+         */
     }
 
     public function light_delete($light_uuid) {

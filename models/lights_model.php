@@ -2,7 +2,7 @@
 
 class LightsModel extends Model {
     /**
-     * @var array Stores the current panel
+     * @var array Stores lights
      */
     private $lights;
 
@@ -16,46 +16,27 @@ class LightsModel extends Model {
     }
 
     public function lights_read() {
-        $this->lights = array('light_uuid1' => array(
-            'name' => 'light name 1',
-            'type' => 1,
-            'rssi' => 190,
-            'hwversion' => '2.0.1',
-            'state' => array(
-                'bri' => 250,
-                'r' => 255,
-                'g' => 0,
-                'b' => 0
-            )
-        ), 'light_uuid2' => array(
-            'name' => 'light name 2',
-            'type' => 2,
-            'rssi' => 190,
-            'hwversion' => '2.0.1',
-            'state' => array(
-                'bri' => 250,
-                'r' => 255,
-                'g' => 0,
-                'b' => 0,
-                'g2' => 255,
-                'b2' => 0
-            )
-        ));
+        $db = new SQLite3('lighting-server.db');
+        $res = $db->query('select * from lights');
+
+        while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
+            $uuid = $light['uuid'];
+            array_shift($light);
+            array_shift($light);
+            $this->lights[$uuid] = $light;
+        }
     }
 
     public function lights_search() {
-        $this->lights = array('light_uuid1' => array(
-            'name' => 'new founded light name',
-            'type' => 1,
-            'rssi' => 190,
-            'hwversion' => '2.0.1',
-            'state' => array(
-                'bri' => 250,
-                'r' => 255,
-                'g' => 0,
-                'b' => 0
-            )
-        ));
+        $db = new SQLite3('lighting-server.db');
+        $res = $db->query('select * from lights where map_uuid = 0');
+
+        while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
+            $uuid = $light['uuid'];
+            array_shift($light);
+            array_shift($light);
+            $this->lights[$uuid] = $light;
+        }
     }
 
     public function lights_replace($lightids) {

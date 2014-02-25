@@ -215,3 +215,7 @@ $router->add_route('/api/scenes/:scene_uuid/lights', 'GET',
         'scene_uuid' => '[0-9]+'
     )
 );
+
+/*
+ * lights and scenes are all in map
+ */
