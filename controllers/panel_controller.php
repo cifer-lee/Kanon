@@ -45,7 +45,7 @@ class PanelController extends Controller {
             $reqbody = file_get_contents('php://input');
             $configure = json_decode($reqbody, true);
 
-            $configure['uuid'] = $params[0];
+            $configure['panel_uuid'] = $params[0];
 
             $this->model->panel_configure($configure);
         } else {

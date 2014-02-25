@@ -32,13 +32,7 @@ class PanelView extends View {
     public function render_put($params) {
         $status = $this->model->get_status();
 
-        if($status) {
-            $resbody = array('success' => array('uri' => "/controllers/{$params[0]}", 'desc' => ""));
-        } else {
-            $resbody = array('failure' => array('uri' => "/controllers/{$params[0]}", 'desc' => ""));
-        }
-
-        $source = json_encode($resbody);
+        $source = json_encode($status);
         echo $source;
     }
 }
