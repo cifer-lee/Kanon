@@ -21,7 +21,23 @@ class PanelModel extends Model {
      * @return no return value
      */
     public function panel_info($panel_uuid) {
-        $this->panel = array('buttons' => array('button1' => '', 'button2' => '', 'button3' => ''));
+        $db = new SQLite3('lighting-server.db');
+        $res = $db->query("select * from panels where uuid = {$panel_uuid}");
+
+        if(! ($panel = $res->fetchArray(SQLITE3_ASSOC))) {
+            // no such panel
+
+            $this->panel = array();
+            return ;
+        }
+
+        $res = $db->query("select panel_buttons.button_id, panel_buttons.scene_uuid from panels left join panel_buttons on panel_buttons.panel_uuid = panels.uuid where panels.uuid = {$panel_uuid};");
+
+        while(($button = $res->fetchArray(SQLITE3_ASSOC))) {
+            $panel['buttons'][] = array("{$button['button_id']}" => "{$button['scene_uuid']}");
+        }
+
+        $this->panel = $panel;
     }
 
     /**

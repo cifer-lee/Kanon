@@ -24,6 +24,9 @@ class PanelsController extends Controller {
             $reqbody = file_get_contents('php://input');
             $panel = json_decode($reqbody, true);
 
+            // default map 1
+            $panel['map_uuid'] = 1;
+
             $this->model->create_panel($panel);
         } else {
             header('HTTP/1.1 415 Unsupported Media Type');
