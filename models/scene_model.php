@@ -15,10 +15,15 @@ class SceneModel extends Model {
     public function __construct() {
     }
 
-    public function scene_read() {
-        $this->scene = array(
-            'name' => 'scene name 1'
-        );
+    public function scene_read($scene_uuid) {
+        $db = new SQLite3('lighting-server.db');
+        $res = $db->query("select * from scenes where uuid = {$scene_uuid}");
+
+        if(($scene = $res->fetchArray(SQLITE3_ASSOC))) {
+            $this->scene = $scene;
+        } else {
+            // no such scene
+        }
     }
 
     public function scene_active($scene_uuid) {
@@ -31,26 +36,17 @@ class SceneModel extends Model {
         ));
     }
 
-    public function light_delete($light_uuid) {
-        $this->status = array(
-            'success' => array(
-                'uri' => "/lights/{$light_uuid}",
-                'desc' => "{$light_uuid}"
-            )
-        );
-    }
-
     /**
-     * Used by LightsView to get the current panel info
+     * Used by SceneView to get the current scene info
      *
-     * @return array The panel info
+     * @return array The scene info
      */
     public function get_scene() {
         return $this->scene;
     }
 
     /**
-     * Used by LightsView to get the last operation's status
+     * Used by SceneView to get the last operation's status
      *
      * @return boolean The last operation's status
      */
