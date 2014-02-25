@@ -15,30 +15,49 @@ class ScenesModel extends Model {
     public function __construct() {
     }
 
-    public function scenes_read() {
-        $this->scenes = array(
-            'sceneUuid1' => array('name' => 'scene name 1'),
-            'sceneUuid2' => array('name' => 'scene name 2')
-        );
+    public function scenes_read($map_uuid) {
+        $db = new SQLite3('lighting-server.db');
+        $res = $db->query("select * from scenes where map_uuid = {$map_uuid}");
+
+        while(($scene = $res->fetchArray(SQLITE3_ASSOC))) {
+            $this->scenes[] = $scene;
+        }
     }
 
     public function scene_create($scene) {
-        $this->status = array(
-            array(
-                'success' => array(
-                    'uri' => '/scenes',
-                    'desc' => '1'
-            )
-        ));
-    }
+        $db = new SQLite3('lighting-server.db');
+        $source = <<<EOD
+insert into scenes (name, map_uuid) values ('{$scene['name']}', {$scene['map_uuid']});
+EOD;
+        $ret = $db->exec($source);
+        if(! $ret) {
+            $this->status = array(
+                array(
+                    'failure' => array(
+                        'uri' => '/scenes',
+                        'desc' => ""
+                    )
+                ));
 
-    public function light_delete($light_uuid) {
-        $this->status = array(
-            'success' => array(
-                'uri' => "/lights/{$light_uuid}",
-                'desc' => "{$light_uuid}"
-            )
-        );
+        }
+
+        $uuid = $db->lastInsertRowID();
+
+        $source = <<<EOD
+insert into scene_lights (scene_uuid, light_uuid, type, bri, r, g, b, g2, b2) select {$uuid}, uuid, type, bri, r, g, b, g2, b2 from lights where map_uuid = {$scene['map_uuid']};
+EOD;
+        $ret = $db->exec($source);
+
+        if($ret) {
+            $this->status = array(
+                array(
+                    'success' => array(
+                        'uri' => '/scenes',
+                        'desc' => "{$uuid}"
+                    )
+                )
+            );
+        }
     }
 
     /**
