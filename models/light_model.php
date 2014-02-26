@@ -57,12 +57,25 @@ EOD;
     }
 
     public function light_delete($light_uuid) {
-        $this->status = array(
-            'success' => array(
-                'uri' => "/lights/{$light_uuid}",
-                'desc' => "{$light_uuid}"
-            )
-        );
+        $db = new SQLite3('lighting-server.db');
+        $ret = $db->exec("delete from lights where uuid = {$light_uuid}");
+
+        if($ret) {
+            $this->status = array(
+                'success' => array(
+                    'uri' => "/lights/{$light_uuid}",
+                    'desc' => "{$light_uuid}"
+                )
+            );
+        } else {
+            $error_code = $db->lastErrorCode();
+            $this->status = array(
+                'success' => array(
+                    'uri' => "/lights/{$light_uuid}",
+                    'desc' => "error code: {$error_code}"
+                )
+            );
+        }
     }
 
     /**
