@@ -69,7 +69,7 @@ EOD;
             return ;
         }
 
-        $msg = sprintf("SAVE S%04s\n", $uuid);
+        $msg = sprintf("SAVE S%03s\n", $uuid);
         socket_send($socket, $msg, strlen($msg), MSG_EOF);
     }
 

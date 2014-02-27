@@ -34,6 +34,19 @@ class SceneModel extends Model {
                     'desc' => "{$scene_uuid}"
             )
         ));
+
+        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        if(! $socket) {
+            return ;
+        }
+
+        $ret = socket_connect($socket, 'localhost', 10003);
+        if(! $ret) {
+            return ;
+        }
+
+        $msg = sprintf("C S%03s\n", $scene_uuid);
+        socket_send($socket, $msg, strlen($msg), MSG_EOF);
     }
 
     /**
