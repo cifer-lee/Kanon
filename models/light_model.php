@@ -54,6 +54,24 @@ EOD;
         }
 
         $this->status = $sta;
+
+        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        if(! $socket) {
+            return ;
+        }
+
+        $ret = socket_connect($socket, 'localhost', 10003);
+        if(! $ret) {
+            return ;
+        }
+
+        if($origin['type'] == 1) {
+            $msg = "C {$origin['mac']},{$origin['r']},{$origin['g']},{$origin['b']},{$origin['bri']},1\n";
+        } else {
+            $msg = "C {$origin['mac']},{$origin['r']},{$origin['g']},{$origin['b']},{$origin['bri']},1\n";
+            $msg .= "C {$origin['mac']},0,{$origin['g2']},{$origin['b2']},{$origin['bri']},2\n";
+        }
+        socket_send($socket, $msg, strlen($msg), MSG_EOF);
     }
 
     public function light_delete($light_uuid) {
