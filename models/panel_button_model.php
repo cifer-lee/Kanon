@@ -12,7 +12,10 @@ class PanelButtonModel extends Model {
     }
 
     public function button_active($button) {
-        $this->status = array('success' => array('uri' => "/controllers/{$button['controller_id']}/buttons/{$button['button_id']}/active", 'desc' => 'active'));
+        $this->status = array(
+            'status_code' => 0,
+            'message' => ''
+        );
     }
 
     public function get_status() {

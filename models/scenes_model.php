@@ -32,13 +32,9 @@ EOD;
         $ret = $db->exec($source);
         if(! $ret) {
             $this->status = array(
-                array(
-                    'failure' => array(
-                        'uri' => '/scenes',
-                        'desc' => ""
-                    )
-                ));
-
+                'status_code' => 1,
+                'message' => "" 
+            );
         }
 
         $uuid = $db->lastInsertRowID();
@@ -50,12 +46,8 @@ EOD;
 
         if($ret) {
             $this->status = array(
-                array(
-                    'success' => array(
-                        'uri' => '/scenes',
-                        'desc' => "{$uuid}"
-                    )
-                )
+                'status_code' => 0,
+                'message' => "{$uuid}" 
             );
         }
 

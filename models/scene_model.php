@@ -28,12 +28,9 @@ class SceneModel extends Model {
 
     public function scene_active($scene_uuid) {
         $this->status = array(
-            array(
-                'success' => array(
-                    'uri' => "/scenes/{$scene_uuid}/on",
-                    'desc' => "{$scene_uuid}"
-            )
-        ));
+            'status_code' => 0,
+            'message' => "{$scene_uuid}" 
+        );
 
         $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
         if(! $socket) {

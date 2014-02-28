@@ -39,17 +39,13 @@ EOD;
             $db->exec($source);
 
             $sta = array(
-                'success' => array(
-                    'uri' => "/lights/{$light['uuid']}",
-                    'desc' => ""
-                )
+                'status_code' => 0,
+                'message' => ''
             );
         } else {
             $sta = array(
-                'failure' => array(
-                    'uri' => "/lights/{$light['uuid']}",
-                    'desc' => "no such light"
-                )
+                'status_code' => 1,
+                'message' => ''
             );
         }
 
@@ -80,18 +76,14 @@ EOD;
 
         if($ret) {
             $this->status = array(
-                'success' => array(
-                    'uri' => "/lights/{$light_uuid}",
-                    'desc' => "{$light_uuid}"
-                )
+                'status_code' => 0,
+                'message' => ''
             );
         } else {
             $error_code = $db->lastErrorCode();
             $this->status = array(
-                'success' => array(
-                    'uri' => "/lights/{$light_uuid}",
-                    'desc' => "error code: {$error_code}"
-                )
+                'status_code' => $error_code,
+                'message' => ''
             );
         }
     }

@@ -55,10 +55,8 @@ EOD;
         if(! $ret) {
             $error_code = $db->lastErrorCode();
             $this->status = array(
-                'failure' => array(
-                    'uri' => "/controllers/{$panel['uuid']}", 
-                    'desc' => "error code: {$error_code}"
-                )
+                'status_code' => $error_code,
+                'message' => ""
             );
             return ;
         }
@@ -90,10 +88,8 @@ EOD;
 
         if($ret) {
             $this->status = array(
-                'success' => array(
-                    'uri' => '/controllers', 
-                    'desc' => ""
-                )
+                'status_code' => 0,
+                'message' => ""
             );
         }
 
@@ -113,10 +109,8 @@ EOD;
             if(! $ret) {
                 $error_code = $db->lastErrorCode();
                 $this->status = array(
-                    'failure' => array(
-                        'uri' => "/controllers/{$configure['panel_uuid']}/configure", 
-                        'desc' => "error code: {$error_code}"
-                    )
+                    'status_code' => $error_code,
+                    'message' => ""
                 );
 
                 return ;
@@ -124,10 +118,8 @@ EOD;
         }
 
         $this->status = array(
-            'success' => array(
-                'uri' => "/controllers/{$configure['panel_uuid']}/configure", 
-                'desc' => ""
-            )
+            'status_code' => 0,
+            'message' => ""
         );
     }
 
