@@ -17,7 +17,7 @@ EOD;
         while(($row = $res->fetchArray(SQLITE3_ASSOC))) {
             if($pre_panel_uuid == $row['uuid']) {
                 $num = count($this->panels);
-                $this->panels[$num - 1]['buttons'][] = array("{$row['button_id']}" => "{$row['scene_uuid']}");
+                $this->panels[$num - 1]['buttons'][] = array('button_id' => "{$row['button_id']}", 'scene_uuid' => "{$row['scene_uuid']}");
             } else {
                 $pre_panel_uuid = $row['uuid'];
                 $this->panels[] = array(
@@ -25,7 +25,7 @@ EOD;
                     'name' => $row['name'],
                     'type' => $row['type'],
                     'buttons' => array(
-                        array("{$row['button_id']}" => "{$row['scene_uuid']}")
+                        array('button_id' => "{$row['button_id']}", 'scene_uuid' => "{$row['scene_uuid']}")
                     )
                 );
             }

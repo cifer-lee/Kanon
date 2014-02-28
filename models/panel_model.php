@@ -34,7 +34,7 @@ class PanelModel extends Model {
         $res = $db->query("select panel_buttons.button_id, panel_buttons.scene_uuid from panels left join panel_buttons on panel_buttons.panel_uuid = panels.uuid where panels.uuid = {$panel_uuid};");
 
         while(($button = $res->fetchArray(SQLITE3_ASSOC))) {
-            $panel['buttons'][] = array("{$button['button_id']}" => "{$button['scene_uuid']}");
+            $panel['buttons'][] = array('button_id' => "{$button['button_id']}", 'scene_uuid' => "{$button['scene_uuid']}");
         }
 
         $this->panel = $panel;
@@ -64,18 +64,30 @@ EOD;
         }
 
         $source = <<<EOD
-delete from panel_buttons where panel_uuid = {$panel['uuid']};
+select * from panel_buttons where panel_uuid = {$panel['uuid']};
 EOD;
-
-        $db->exec($source);
-
-        $source = 'insert into panel_buttons (button_id, panel_uuid, scene_uuid) values ';
-        foreach($panel['buttons'] as $value) {
-            $source .= "('{$value}', {$panel['uuid']}, 0),";
+        $res = $db->query($source);
+        $origin_buttons = array();
+        while(($button = $res->fetchArray(SQLITE3_ASSOC))) {
+            $origin_buttons[] = $button['button_id'];
         }
-        $source[strlen($source) - 1] = ';';
 
-        $ret = $db->exec($source);
+        $to_delete = array_diff($origin_buttons, $panel['buttons']);
+        $to_insert = array_diff($panel['buttons'], $origin_buttons);
+
+        foreach($to_delete as $button_id) {
+            $source = "delete from panel_buttons where button_id = '{$button_id}' and panel_uuid = {$panel['uuid']}";
+            $db->exec($source);
+        var_dump($source);
+        }
+
+        foreach($to_insert as $button_id) {
+            $source = "insert into panel_buttons (button_id, panel_uuid, scene_uuid) values ('{$button_id}', {$panel['uuid']}, 0);";
+
+            $ret = $db->exec($source);
+        var_dump($source);
+        }
+
         if($ret) {
             $this->status = array(
                 'success' => array(
@@ -93,23 +105,21 @@ EOD;
     public function panel_configure($configure) {
         $db = new SQLite3('lighting-server.db');
 
-        foreach($configure['buttons'] as $value) {
-            foreach($value as $btn_id => $scene_id) {
-                $source = "update panel_buttons set scene_uuid = {$scene_id} where button_id = '{$btn_id}' and panel_uuid = {$configure['panel_uuid']}";
+        foreach($configure['buttons'] as $button) {
+            $source = "update panel_buttons set scene_uuid = {$button['scene_uuid']} where button_id = '{$button['button_id']}' and panel_uuid = {$configure['panel_uuid']}";
 
-                $ret = $db->exec($source);
+            $ret = $db->exec($source);
 
-                if(! $ret) {
-                    $error_code = $db->lastErrorCode();
-                    $this->status = array(
-                        'failure' => array(
-                            'uri' => "/controllers/{$configure['panel_uuid']}/configure", 
-                            'desc' => "error code: {$error_code}"
-                        )
-                    );
+            if(! $ret) {
+                $error_code = $db->lastErrorCode();
+                $this->status = array(
+                    'failure' => array(
+                        'uri' => "/controllers/{$configure['panel_uuid']}/configure", 
+                        'desc' => "error code: {$error_code}"
+                    )
+                );
 
-                    return ;
-                }
+                return ;
             }
         }
 
