@@ -16,7 +16,7 @@ class ScenesModel extends Model {
     }
 
     public function scenes_read($map_uuid) {
-        $db = new SQLite3('lighting-server.db');
+        $db = Db::get_instance();
         $res = $db->query("select * from scenes where map_uuid = {$map_uuid}");
 
         while(($scene = $res->fetchArray(SQLITE3_ASSOC))) {
@@ -25,7 +25,7 @@ class ScenesModel extends Model {
     }
 
     public function scene_create($scene) {
-        $db = new SQLite3('lighting-server.db');
+        $db = Db::get_instance();
         $source = <<<EOD
 insert into scenes (name, map_uuid) values ('{$scene['name']}', {$scene['map_uuid']});
 EOD;

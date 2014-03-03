@@ -16,13 +16,73 @@ class SceneModel extends Model {
     }
 
     public function scene_read($scene_uuid) {
-        $db = new SQLite3('lighting-server.db');
+        $db = Db::get_instance();
         $res = $db->query("select * from scenes where uuid = {$scene_uuid}");
 
         if(($scene = $res->fetchArray(SQLITE3_ASSOC))) {
             $this->scene = $scene;
         } else {
             // no such scene
+        }
+    }
+
+    public function scene_update($scene) {
+        $db = Db::get_instance();
+        $ret = $db->exec("update scenes set name = '{$scene['name']}' where uuid = {$scene['uuid']};");
+
+        if(! $ret) {
+            $this->status = array(
+                'status_code' => 1,
+                'message' => ''
+            );
+
+            return ;
+        }
+
+        foreach($scene['lights'] as $light) {
+            if($light['type'] == 1) {
+                $source = <<<EOD
+update scene_lights set r = {$light['r']}, g = {$light['g']}, b = {$light['b']}, bri = {$light['bri']} where scene_uuid = {$scene['uuid']} and light_uuid = {$light['uuid']};
+EOD;
+            } else {
+                $source = <<<EOD
+update scene_lights set r = {$light['r']}, g = {$light['g']}, b = {$light['b']}, g2 = {$light['g2']}, b2 = {$light['b2']}, bri = {$light['bri']} where scene_uuid = {$scene['uuid']} and light_uuid = {$light['uuid']};
+EOD;
+            }
+
+            $ret = $db->exec($source);
+        }
+
+        if($ret) {
+            $this->status = array(
+                'status_code' => 0,
+                'message' => ''
+            );
+        }
+    }
+
+    public function scene_remove($scene_uuid) {
+        $db = Db::get_instance();
+
+        $ret = $db->exec("delete from scenes where uuid = {$scene_uuid}");
+
+        if(! $ret) {
+            $error_msg = $db->lastErrorMsg();
+            $this->status = array(
+                'status_code' => 1,
+                'message' => "$error_msg"
+            );
+
+            return ;
+        }
+
+        $ret = $db->exec("delete from scene_lights where scene_uuid = {$scene_uuid}");
+
+        if($ret) {
+            $this->status = array(
+                'status_code' => 0,
+                'message' => ''
+            );
         }
     }
 

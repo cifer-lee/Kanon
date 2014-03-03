@@ -196,6 +196,26 @@ $router->add_route('/api/scenes/:scene_uuid', 'GET',
     )
 );
 
+$router->add_route('/api/scenes/:scene_uuid', 'PUT',
+    array(
+        'controller' => 'scene',
+        'action' => 'scene_update'
+    ),
+    array(
+        'scene_uuid' => '[0-9]+'
+    )
+);
+
+$router->add_route('/api/scenes/:scene_uuid', 'DELETE',
+    array(
+        'controller' => 'scene',
+        'action' => 'scene_remove'
+    ),
+    array(
+        'scene_uuid' => '[0-9]+'
+    )
+);
+
 $router->add_route('/api/scenes/:scene_uuid/on', 'POST',
     array(
         'controller' => 'scene',

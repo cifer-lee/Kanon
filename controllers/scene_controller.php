@@ -17,6 +17,30 @@ class SceneController extends Controller {
         $this->model->scene_read($params[0]);
     }
 
+    public function scene_update() {
+        $args = func_get_args();
+        $params = $args[0];
+
+        if(isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json') {
+            $reqbody = file_get_contents('php://input');
+            $scene = json_decode($reqbody, true);
+
+            $scene['uuid'] = $params[0];
+
+            $this->model->scene_update($scene);
+        } else {
+            header('HTTP/1.1 415 Unsupported Media Type');
+            die();
+        }
+    }
+
+    public function scene_remove() {
+        $args = func_get_args();
+        $params = $args[0];
+
+        $this->model->scene_remove($params[0]);
+    }
+
     public function scene_active() {
         $args = func_get_args();
         $params = $args[0];
