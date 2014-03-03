@@ -8,7 +8,7 @@ class PanelsModel extends Model {
     }
 
     public function get_all_panels() {
-        $db = new SQLite3('lighting-server.db');
+        $db =& Db::get_instance();
         $source = <<<EOD
 select panels.uuid, panels.name, panels.type, panel_buttons.button_id, panel_buttons.scene_uuid from panels left join panel_buttons on panels.uuid = panel_buttons.panel_uuid;
 EOD;
@@ -35,7 +35,7 @@ EOD;
     }
 
     public function create_panel($panel) {
-        $db = new SQLite3('lighting-server.db');
+        $db =& Db::get_instance();
 
         $source = <<<EOD
 insert into panels (name, type, map_uuid) values ('{$panel['name']}', {$panel['type']}, {$panel['map_uuid']});

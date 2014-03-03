@@ -16,7 +16,7 @@ class SceneModel extends Model {
     }
 
     public function scene_read($scene_uuid) {
-        $db = Db::get_instance();
+        $db =& Db::get_instance();
         $res = $db->query("select * from scenes where uuid = {$scene_uuid}");
 
         if(($scene = $res->fetchArray(SQLITE3_ASSOC))) {

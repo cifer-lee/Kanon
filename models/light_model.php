@@ -16,7 +16,7 @@ class LightModel extends Model {
     }
 
     public function light_read($light_uuid) {
-        $db = new SQLite3('lighting-server.db');
+        $db =& Db::get_instance();
         $res = $db->query("select * from lights where uuid = $light_uuid");
         if(($light = $res->fetchArray(SQLITE3_ASSOC))) {
             $this->light = $light;
@@ -26,7 +26,7 @@ class LightModel extends Model {
     }
 
     public function light_update($light) {
-        $db = new SQLite3('lighting-server.db');
+        $db =& Db::get_instance();
         $res = $db->query("select * from lights where uuid = {$light['uuid']}");
 
         if(($origin = $res->fetchArray(SQLITE3_ASSOC))) {
@@ -71,7 +71,7 @@ EOD;
     }
 
     public function light_delete($light_uuid) {
-        $db = new SQLite3('lighting-server.db');
+        $db =& Db::get_instance();
         $ret = $db->exec("delete from lights where uuid = {$light_uuid}");
 
         if($ret) {

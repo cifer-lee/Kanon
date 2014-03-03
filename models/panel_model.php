@@ -21,7 +21,7 @@ class PanelModel extends Model {
      * @return no return value
      */
     public function panel_info($panel_uuid) {
-        $db = new SQLite3('lighting-server.db');
+        $db =& Db::get_instance();
         $res = $db->query("select * from panels where uuid = {$panel_uuid}");
 
         if(! ($panel = $res->fetchArray(SQLITE3_ASSOC))) {
@@ -46,7 +46,7 @@ class PanelModel extends Model {
      * @param $panel array  The panel's new information
      */
     public function panel_update($panel) {
-        $db = new SQLite3('lighting-server.db');
+        $db =& Db::get_instance();
         $source = <<<EOD
 update panels set name = '{$panel['name']}', type = {$panel['type']} where uuid = {$panel['uuid']};
 EOD;
@@ -99,7 +99,7 @@ EOD;
      * Build relationships between panel buttons and scenes.
      */
     public function panel_configure($configure) {
-        $db = new SQLite3('lighting-server.db');
+        $db =& Db::get_instance();
 
         foreach($configure['buttons'] as $button) {
             $source = "update panel_buttons set scene_uuid = {$button['scene_uuid']} where button_id = '{$button['button_id']}' and panel_uuid = {$configure['panel_uuid']}";

@@ -15,31 +15,33 @@ class ScenesLightsModel extends Model {
     public function __construct() {
     }
 
-    public function scenes_lights_read() {
-        $this->scenes_lights = array(
-            'lightUuid1' => array(
-                'name' => 'light name 1',
-                'type' => 1,
-                'state' => array(
-                    'r' => 255,
-                    'g' => 0,
-                    'b' => 255,
-                    'bri' => 255
-                )
-            ), 
-            'lightUuid2' => array(
-                'name' => 'light name 2',
-                'type' => 2,
-                'state' => array(
-                    'r' => 255,
-                    'g' => 0,
-                    'b' => 255,
-                    'g2' => 255,
-                    'b2' => 0,
-                    'bri' => 255
-                )
-            )
-        );
+    public function scenes_lights_read($scene_uuid) {
+        $db =& Db::get_instance();
+        $res = $db->query("select * from scene_lights where scene_uuid = {$scene_uuid};");
+
+        while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
+            if($light['type'] == 1) {
+                $this->scenes_lights[] = array(
+                    'uuid' => $light['light_uuid'],
+                    'type' => $light['type'],
+                    'r' => $light['r'],
+                    'g' => $light['g'],
+                    'b' => $light['b'],
+                    'bri' => $light['bri']
+                );
+            } else {
+                $this->scenes_lights[] = array(
+                    'uuid' => $light['light_uuid'],
+                    'type' => $light['type'],
+                    'r' => $light['r'],
+                    'g' => $light['g'],
+                    'b' => $light['b'],
+                    'g2' => $light['g2'],
+                    'b2' => $light['b2'],
+                    'bri' => $light['bri']
+                );
+            }
+        }
     }
 
     public function maps_light_update($loc) {
@@ -50,15 +52,6 @@ class ScenesLightsModel extends Model {
                     'desc' => ""
             )
         ));
-    }
-
-    public function light_delete($light_uuid) {
-        $this->status = array(
-            'success' => array(
-                'uri' => "/lights/{$light_uuid}",
-                'desc' => "{$light_uuid}"
-            )
-        );
     }
 
     /**

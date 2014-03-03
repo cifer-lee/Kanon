@@ -16,7 +16,7 @@ class LightsModel extends Model {
     }
 
     public function lights_read() {
-        $db = new SQLite3('lighting-server.db');
+        $db =& Db::get_instance();
         $res = $db->query('select * from lights');
 
         while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
@@ -25,7 +25,7 @@ class LightsModel extends Model {
     }
 
     public function lights_search() {
-        $db = new SQLite3('lighting-server.db');
+        $db =& Db::get_instance();
         $res = $db->query('select * from lights where map_uuid = 0');
 
         while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
