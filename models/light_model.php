@@ -65,8 +65,8 @@ EOD;
         if($origin['type'] == 1) {
             $msg = "C {$origin['mac']},{$origin['r']},{$origin['g']},{$origin['b']},{$origin['bri']},1\n";
         } else {
-            $msg = "C {$origin['mac']},{$origin['r']},{$origin['g']},{$origin['b']},{$origin['bri']},1\n";
-            $msg .= "C {$origin['mac']},0,{$origin['g2']},{$origin['b2']},{$origin['bri']},2\n";
+            $msg = "C {$origin['mac']},{$origin['r']},{$origin['g']},{$origin['b']},{$origin['bri']},2\n";
+            $msg .= "C {$origin['mac']},0,{$origin['g2']},{$origin['b2']},{$origin['bri']},1\n";
         }
         socket_send($socket, $msg, strlen($msg), MSG_EOF);
     }
