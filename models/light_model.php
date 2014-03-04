@@ -13,36 +13,54 @@ class LightModel extends Model {
     private $status;
 
     public function __construct() {
+        $this->light = array();
     }
 
     public function light_read($light_uuid) {
         $db =& Db::get_instance();
-        $res = $db->query("select * from lights where uuid = $light_uuid");
+
+        $source = <<<EOD
+select uuid, name, type, rssi, online, bri, r, g, b, warm, map_uuid, loc_x, loc_y from lights where map_uuid = 1 and uuid = {$light_uuid};
+EOD;
+        $res = $db->query($source);
+
         if(($light = $res->fetchArray(SQLITE3_ASSOC))) {
             $this->light = $light;
-        } else {
-            $this->light = array();
         }
     }
 
     public function light_update($light) {
         $db =& Db::get_instance();
-        $res = $db->query("select * from lights where uuid = {$light['uuid']}");
+
+        /**
+         * default map_uuid to 1 */
+        $res = $db->query("select * from lights where map_uuid = 1 and uuid = {$light['uuid']}");
+
+        /**
+         * filter the read only resource, not allow user to change */
+        unset($light['type']);
+        unset($light['rssi']);
+        unset($light['map_uuid']);
 
         if(($origin = $res->fetchArray(SQLITE3_ASSOC))) {
             $origin = array_merge($origin, $light);
 
+            /**
+             * caculate the g2 and b2 according to warm field */
+            //$origin['g2'] = $origin['warm'];
+            //$origin['b2'] = $origin['warm'];
+
             $source = <<<EOD
-update lights set name='{$origin['name']}', bri={$origin['bri']}, r={$origin['r']}, g={$origin['g']}, b={$origin['b']}, g2={$origin['g2']}, b2={$origin['b2']}, map_uuid={$origin['map_uuid']}, loc_x={$origin['loc_x']}, loc_y={$origin['loc_y']} where uuid={$origin['uuid']};
+update lights set name='{$origin['name']}', bri={$origin['bri']}, r={$origin['r']}, g={$origin['g']}, b={$origin['b']}, g2={$origin['g2']}, b2={$origin['b2']}, warm={$origin['warm']}, loc_x={$origin['loc_x']}, loc_y={$origin['loc_y']} where map_uuid = 1 and uuid={$origin['uuid']};
 EOD;
             $db->exec($source);
 
-            $sta = array(
+            $this->status = array(
                 'status_code' => 0,
                 'message' => ''
             );
         } else {
-            $sta = array(
+            $this->status = array(
                 'status_code' => 1,
                 'message' => 'no such light'
             );
@@ -50,15 +68,8 @@ EOD;
             return ;
         }
 
-        $this->status = $sta;
-
-        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        $socket = Socket::get_instance();
         if(! $socket) {
-            return ;
-        }
-
-        $ret = socket_connect($socket, 'localhost', 10003);
-        if(! $ret) {
             return ;
         }
 
@@ -73,18 +84,23 @@ EOD;
 
     public function light_delete($light_uuid) {
         $db =& Db::get_instance();
-        $ret = $db->exec("delete from lights where uuid = {$light_uuid}");
 
-        if($ret) {
-            $this->status = array(
-                'status_code' => 0,
-                'message' => ''
-            );
+        $res = $db->query("select mac from lights where map_uuid = 1 and uuid = {$light_uuid}");
+
+        if(($light = $res->fetchArray(SQLITE3_ASSOC))) {
+            $ret = $db->exec("delete from lights where map_uuid = 1 and uuid = {$light_uuid}");
+
+            $socket = Socket::get_instance();
+            if(! $socket) {
+                return ;
+            }
+
+            $msg = "DEL {$light['mac']}\n";
+            socket_send($socket, $msg, strlen($msg), MSG_EOF);
         } else {
-            $error_code = $db->lastErrorCode();
             $this->status = array(
-                'status_code' => $error_code,
-                'message' => ''
+                'status_code' => 1,
+                'message' => 'no such light'
             );
         }
     }

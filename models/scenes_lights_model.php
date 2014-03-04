@@ -13,6 +13,7 @@ class ScenesLightsModel extends Model {
     private $status;
 
     public function __construct() {
+        $this->scenes_lights = array();
     }
 
     public function scenes_lights_read($scene_uuid) {
@@ -36,22 +37,11 @@ class ScenesLightsModel extends Model {
                     'r' => $light['r'],
                     'g' => $light['g'],
                     'b' => $light['b'],
-                    'g2' => $light['g2'],
-                    'b2' => $light['b2'],
+                    'warm' => $light['warm'],
                     'bri' => $light['bri']
                 );
             }
         }
-    }
-
-    public function maps_light_update($loc) {
-        $this->status = array(
-            array(
-                'success' => array(
-                    'uri' => "/maps/{$loc['map_uuid']}/lights/{$loc['light_uuid']}",
-                    'desc' => ""
-            )
-        ));
     }
 
     /**

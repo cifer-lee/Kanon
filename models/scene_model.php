@@ -13,22 +13,22 @@ class SceneModel extends Model {
     private $status;
 
     public function __construct() {
+            $this->scene = array();
     }
 
     public function scene_read($scene_uuid) {
         $db =& Db::get_instance();
-        $res = $db->query("select * from scenes where uuid = {$scene_uuid}");
+        $res = $db->query("select * from scenes where map_uuid = 1 and uuid = {$scene_uuid}");
 
         if(($scene = $res->fetchArray(SQLITE3_ASSOC))) {
             $this->scene = $scene;
-        } else {
-            // no such scene
         }
     }
 
     public function scene_update($scene) {
         $db = Db::get_instance();
-        $ret = $db->exec("update scenes set name = '{$scene['name']}' where uuid = {$scene['uuid']};");
+        $db->exec('begin;');
+        $ret = $db->exec("update scenes set name = '{$scene['name']}' where map_uuid = 1 and uuid = {$scene['uuid']};");
 
         if(! $ret) {
             $this->status = array(
@@ -36,6 +36,7 @@ class SceneModel extends Model {
                 'message' => ''
             );
 
+            $db->exec('rollback;');
             return ;
         }
 
@@ -45,25 +46,39 @@ class SceneModel extends Model {
 update scene_lights set r = {$light['r']}, g = {$light['g']}, b = {$light['b']}, bri = {$light['bri']} where scene_uuid = {$scene['uuid']} and light_uuid = {$light['uuid']};
 EOD;
             } else {
+                /**
+                 * caculate the g2 and b2 according to warm field */
+                $light['g2'] = $light['warm'];
+                $light['b2'] = $light['warm'];
                 $source = <<<EOD
-update scene_lights set r = {$light['r']}, g = {$light['g']}, b = {$light['b']}, g2 = {$light['g2']}, b2 = {$light['b2']}, bri = {$light['bri']} where scene_uuid = {$scene['uuid']} and light_uuid = {$light['uuid']};
+update scene_lights set r = {$light['r']}, g = {$light['g']}, b = {$light['b']}, warm = {$light['warm']}, g2 = {$light['g2']}, b2 = {$light['b2']}, bri = {$light['bri']} where scene_uuid = {$scene['uuid']} and light_uuid = {$light['uuid']};
 EOD;
             }
 
             $ret = $db->exec($source);
+
+            if(! $ret) {
+                $this->status = array(
+                    'status_code' => 1,
+                    'message' => ''
+                );
+
+                $db->exec('rollback;');
+                return ;
+            }
         }
 
-        if($ret) {
-            $this->status = array(
-                'status_code' => 0,
-                'message' => ''
-            );
-        }
+        $db->exec('commit;');
+        $this->status = array(
+            'status_code' => 0,
+            'message' => ''
+        );
     }
 
     public function scene_remove($scene_uuid) {
         $db = Db::get_instance();
 
+        $db->exec('begin;');
         $ret = $db->exec("delete from scenes where uuid = {$scene_uuid}");
 
         if(! $ret) {
@@ -73,6 +88,7 @@ EOD;
                 'message' => "$error_msg"
             );
 
+            $db->exec('rollback;');
             return ;
         }
 
@@ -83,6 +99,8 @@ EOD;
                 'status_code' => 0,
                 'message' => ''
             );
+
+            $db->exec('commit;');
         }
     }
 
@@ -92,13 +110,8 @@ EOD;
             'message' => "{$scene_uuid}" 
         );
 
-        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        $socket = Socket::get_instance();
         if(! $socket) {
-            return ;
-        }
-
-        $ret = socket_connect($socket, 'localhost', 10003);
-        if(! $ret) {
             return ;
         }
 

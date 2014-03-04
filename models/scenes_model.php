@@ -13,6 +13,7 @@ class ScenesModel extends Model {
     private $status;
 
     public function __construct() {
+            $this->scenes = array();
     }
 
     public function scenes_read($map_uuid) {
@@ -26,6 +27,10 @@ class ScenesModel extends Model {
 
     public function scene_create($scene) {
         $db = Db::get_instance();
+        /**
+         * begin a transication */
+        $db->exec('begin;');
+
         $source = <<<EOD
 insert into scenes (name, map_uuid) values ('{$scene['name']}', {$scene['map_uuid']});
 EOD;
@@ -35,12 +40,16 @@ EOD;
                 'status_code' => 1,
                 'message' => "" 
             );
+
+            $db->exec('rollback;');
+
+            return ;
         }
 
         $uuid = $db->lastInsertRowID();
 
         $source = <<<EOD
-insert into scene_lights (scene_uuid, light_uuid, type, bri, r, g, b, g2, b2) select {$uuid}, uuid, type, bri, r, g, b, g2, b2 from lights where map_uuid = {$scene['map_uuid']};
+insert into scene_lights (scene_uuid, light_uuid, type, bri, r, g, b, warm, g2, b2) select {$uuid}, uuid, type, bri, r, g, b, warm, g2, b2 from lights where map_uuid = {$scene['map_uuid']};
 EOD;
         $ret = $db->exec($source);
 
@@ -49,15 +58,15 @@ EOD;
                 'status_code' => 0,
                 'message' => "{$uuid}" 
             );
-        }
 
-        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-        if(! $socket) {
+            $db->exec('commit;');
+        } else {
+            $db->exec('rollback;');
             return ;
         }
 
-        $ret = socket_connect($socket, 'localhost', 10003);
-        if(! $ret) {
+        $socket = Socket::get_instance();
+        if(! $socket) {
             return ;
         }
 
