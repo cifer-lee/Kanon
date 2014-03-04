@@ -33,6 +33,26 @@ class LightsModel extends Model {
         }
     }
 
+    public function lights_check_new() {
+        $this->status = array(
+            'status_code' => '0',
+            'message' => ''
+        );
+
+        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        if(! $socket) {
+            return ;
+        }
+
+        $ret = socket_connect($socket, 'localhost', 10003);
+        if(! $ret) {
+            return ;
+        }
+
+        $msg = "R\n";
+        socket_send($socket, $msg, strlen($msg), MSG_EOF);
+    }
+
     public function lights_replace($lightids) {
         $this->status = array(
             'status_code' => 0,

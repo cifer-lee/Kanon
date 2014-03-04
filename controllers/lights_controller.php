@@ -21,6 +21,10 @@ class LightsController extends Controller {
         $this->model->lights_search();
     }
 
+    public function lights_check_new() {
+        $this->model->lights_check_new();
+    }
+
     /**
      * Replace light
      */
