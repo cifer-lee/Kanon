@@ -8,5 +8,10 @@ class ConfigurationController extends Controller {
     }
 
     public function get_configuration() {
+        $this->model->get_configuration();
+    }
+
+    public function configuration_reset() {
+        $this->model->configuration_reset();
     }
 }
