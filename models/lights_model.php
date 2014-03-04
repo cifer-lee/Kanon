@@ -13,11 +13,21 @@ class LightsModel extends Model {
     private $status;
 
     public function __construct() {
+        $this->lights = array();
     }
 
     public function lights_read() {
         $db =& Db::get_instance();
-        $res = $db->query('select * from lights');
+
+        // there is only one map, so here restrict the map_uuid to 1
+        $source = <<<EOD
+select uuid, name, type, rssi, online, bri, r, g, b, warm, map_uuid, loc_x, loc_y from lights where map_uuid = 1;
+EOD;
+        $res = $db->query($source);
+
+        if(! $res) {
+            return ;
+        }
 
         while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
             $this->lights[] = $light;
@@ -26,7 +36,12 @@ class LightsModel extends Model {
 
     public function lights_search() {
         $db =& Db::get_instance();
-        $res = $db->query('select * from lights where map_uuid = 0');
+
+        // there is only one map, so here restrict the map_uuid to 1
+        $source = <<<EOD
+select uuid, name, type, rssi, online, bri, r, g, b, warm, map_uuid, loc_x, loc_y from lights where map_uuid = 1 and loc_x = -1; 
+EOD;
+        $res = $db->query($source);
 
         while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
             $this->lights[] = $light;
