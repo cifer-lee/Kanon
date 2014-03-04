@@ -62,6 +62,13 @@ $router->add_route('/api/bridge', 'GET',
     )
 );
 
+$router->add_route('/api/bridge/reset', 'POST', 
+    array(
+        'controller' => 'configuration',
+        'action' => 'configuration_reset'
+    )
+);
+
 $router->add_route('/api/lights', 'GET',
     array(
         'controller' => 'lights',
@@ -73,6 +80,13 @@ $router->add_route('/api/lights/search', 'GET',
     array(
         'controller' => 'lights',
         'action' => 'lights_search'
+    )
+);
+
+$router->add_route('/api/lights/check-new', 'POST',
+    array(
+        'controller' => 'lights',
+        'action' => 'lights_check_new'
     )
 );
 

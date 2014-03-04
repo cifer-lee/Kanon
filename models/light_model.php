@@ -35,7 +35,6 @@ class LightModel extends Model {
             $source = <<<EOD
 update lights set name='{$origin['name']}', bri={$origin['bri']}, r={$origin['r']}, g={$origin['g']}, b={$origin['b']}, g2={$origin['g2']}, b2={$origin['b2']}, map_uuid={$origin['map_uuid']}, loc_x={$origin['loc_x']}, loc_y={$origin['loc_y']} where uuid={$origin['uuid']};
 EOD;
-
             $db->exec($source);
 
             $sta = array(
@@ -45,8 +44,10 @@ EOD;
         } else {
             $sta = array(
                 'status_code' => 1,
-                'message' => ''
+                'message' => 'no such light'
             );
+
+            return ;
         }
 
         $this->status = $sta;
