@@ -90,6 +90,11 @@ EOD;
         if(($light = $res->fetchArray(SQLITE3_ASSOC))) {
             $ret = $db->exec("delete from lights where map_uuid = 1 and uuid = {$light_uuid}");
 
+            $this->status = array(
+                'status_code' => 0,
+                'message' => ''
+            );
+
             $socket = Socket::get_instance();
             if(! $socket) {
                 return ;
