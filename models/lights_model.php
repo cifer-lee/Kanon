@@ -54,13 +54,8 @@ EOD;
             'message' => ''
         );
 
-        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        $socket = Socket::get_instance();
         if(! $socket) {
-            return ;
-        }
-
-        $ret = socket_connect($socket, 'localhost', 10003);
-        if(! $ret) {
             return ;
         }
 
