@@ -1,7 +1,7 @@
 <?php
 
 class Db {
-    const DATABASE = '/tmp/lighting-server.db';
+    const DATABASE = '/tmp/yeebox.db';
 
     private static $_db;
 
