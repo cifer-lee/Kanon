@@ -49,7 +49,7 @@ EOD;
         $uuid = $db->lastInsertRowID();
 
         $source = <<<EOD
-insert into scene_lights (scene_uuid, light_uuid, type, bri, r, g, b, warm, g2, b2) select {$uuid}, uuid, type, bri, r, g, b, warm, g2, b2 from lights where map_uuid = {$scene['map_uuid']};
+insert into scene_lights (scene_uuid, light_uuid, type, bri, r, g, b, warm, r2, g2, b2) select {$uuid}, uuid, type, bri, r, g, b, warm, r2, g2, b2 from lights where map_uuid = {$scene['map_uuid']};
 EOD;
         $ret = $db->exec($source);
 

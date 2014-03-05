@@ -14,6 +14,7 @@ define('VIEWS', ROOT . '/views');
 define('MODELS', ROOT . '/models');
 define('DB', ROOT . '/models/sqlite');
 define('SOCKET', ROOT . '/models/socket');
+define('UTILS', ROOT . '/models/utils');
 define('TEMPLATES', ROOT . '/templates');
 
 /**
@@ -25,6 +26,7 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR
 . MODELS . PATH_SEPARATOR
 . DB . PATH_SEPARATOR
 . SOCKET . PATH_SEPARATOR
+. UTILS . PATH_SEPARATOR
 . TEMPLATES);
 
 require 'controller.php';
@@ -32,6 +34,7 @@ require 'view.php';
 require 'model.php';
 require 'db.php';
 require 'socket.php';
+require 'utils.php';
 
 define ('HTTP_METHOD_GET', 'GET');
 define ('HTTP_METHOD_POST', 'POST');

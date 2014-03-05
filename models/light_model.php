@@ -46,13 +46,14 @@ EOD;
             $origin = array_merge($origin, $light);
 
             /**
-             * caculate the g2 and b2 according to warm field */
-            //$origin['g2'] = $origin['warm'];
-            //$origin['b2'] = $origin['warm'];
+             * caculate the r2, g2 and b2 according to warm field */
+            list($origin['b2'], $origin['g2'], $origin['r2']) = array_values(Utils::warm_convert($origin['warm']));
 
             $source = <<<EOD
-update lights set name='{$origin['name']}', bri={$origin['bri']}, r={$origin['r']}, g={$origin['g']}, b={$origin['b']}, g2={$origin['g2']}, b2={$origin['b2']}, warm={$origin['warm']}, loc_x={$origin['loc_x']}, loc_y={$origin['loc_y']} where map_uuid = 1 and uuid={$origin['uuid']};
+update lights set name='{$origin['name']}', bri={$origin['bri']}, r={$origin['r']}, g={$origin['g']}, b={$origin['b']}, r2={$origin['r2']}, g2={$origin['g2']}, b2={$origin['b2']}, warm={$origin['warm']}, loc_x={$origin['loc_x']}, loc_y={$origin['loc_y']} where map_uuid = 1 and uuid={$origin['uuid']};
 EOD;
+
+            var_dump($source);
             $db->exec($source);
 
             $this->status = array(
@@ -77,7 +78,7 @@ EOD;
             $msg = "C {$origin['mac']},{$origin['r']},{$origin['g']},{$origin['b']},{$origin['bri']},1\n";
         } else {
             $msg = "C {$origin['mac']},{$origin['r']},{$origin['g']},{$origin['b']},{$origin['bri']},2\n";
-            $msg .= "C {$origin['mac']},0,{$origin['g2']},{$origin['b2']},{$origin['bri']},1\n";
+            $msg .= "C {$origin['mac']},{$origin['r2']},{$origin['g2']},{$origin['b2']},{$origin['bri']},1\n";
         }
         socket_send($socket, $msg, strlen($msg), MSG_EOF);
     }
