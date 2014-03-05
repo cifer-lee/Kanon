@@ -53,7 +53,6 @@ EOD;
 update lights set name='{$origin['name']}', bri={$origin['bri']}, r={$origin['r']}, g={$origin['g']}, b={$origin['b']}, r2={$origin['r2']}, g2={$origin['g2']}, b2={$origin['b2']}, warm={$origin['warm']}, loc_x={$origin['loc_x']}, loc_y={$origin['loc_y']} where map_uuid = 1 and uuid={$origin['uuid']};
 EOD;
 
-            var_dump($source);
             $db->exec($source);
 
             $this->status = array(

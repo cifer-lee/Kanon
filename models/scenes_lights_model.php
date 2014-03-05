@@ -21,26 +21,20 @@ class ScenesLightsModel extends Model {
         $res = $db->query("select * from scene_lights where scene_uuid = {$scene_uuid};");
 
         while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
-            if($light['type'] == 1) {
-                $this->scenes_lights[] = array(
-                    'uuid' => $light['light_uuid'],
-                    'type' => $light['type'],
-                    'r' => $light['r'],
-                    'g' => $light['g'],
-                    'b' => $light['b'],
-                    'bri' => $light['bri']
-                );
-            } else {
-                $this->scenes_lights[] = array(
-                    'uuid' => $light['light_uuid'],
-                    'type' => $light['type'],
-                    'r' => $light['r'],
-                    'g' => $light['g'],
-                    'b' => $light['b'],
-                    'warm' => $light['warm'],
-                    'bri' => $light['bri']
-                );
+            $state = array(
+                'uuid' => $light['light_uuid'],
+                'type' => $light['type'],
+                'r' => $light['r'],
+                'g' => $light['g'],
+                'b' => $light['b'],
+                'bri' => $light['bri']
+            );
+
+            if($light['type'] == 2) {
+                $state['warm'] = $light['warm'];
             }
+
+            $this->scenes_lights[] = $state;
         }
     }
 
