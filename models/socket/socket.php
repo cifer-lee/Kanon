@@ -6,6 +6,9 @@ class Socket {
 
     private static $_socket;
 
+    private function __construct() {
+    }
+
     public static function &get_instance() {
         if(! isset(self::$_socket)) {
             self::$_socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);

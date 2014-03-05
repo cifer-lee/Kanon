@@ -5,6 +5,9 @@ class Db {
 
     private static $_db;
 
+    private function __construct() {
+    }
+
     public static function &get_instance() {
         if(! isset(self::$_db)) {
             self::$_db = new SQLite3(self::DATABASE);
