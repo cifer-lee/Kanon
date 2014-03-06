@@ -47,6 +47,8 @@ class PanelModel extends Model {
      */
     public function panel_update($panel) {
         $db =& Db::get_instance();
+        $db->exec('begin;');
+
         $source = <<<EOD
 update panels set name = '{$panel['name']}', type = {$panel['type']} where uuid = {$panel['uuid']};
 EOD;
@@ -58,6 +60,8 @@ EOD;
                 'status_code' => $error_code,
                 'message' => ""
             );
+
+            $db->exec('rollback;');
             return ;
         }
 
@@ -75,15 +79,34 @@ EOD;
 
         foreach($to_delete as $button_id) {
             $source = "delete from panel_buttons where button_id = '{$button_id}' and panel_uuid = {$panel['uuid']}";
-            $db->exec($source);
-        var_dump($source);
+            $ret = $db->exec($source);
+            if(! $ret) {
+                $error_code = $db->lastErrorCode();
+                $this->status = array(
+                    'status_code' => $error_code,
+                    'message' => ""
+                );
+
+                $db->exec('rollback;');
+                return ;
+            }
         }
 
         foreach($to_insert as $button_id) {
             $source = "insert into panel_buttons (button_id, panel_uuid, scene_uuid) values ('{$button_id}', {$panel['uuid']}, 0);";
 
             $ret = $db->exec($source);
-        var_dump($source);
+
+            if(! $ret) {
+                $error_code = $db->lastErrorCode();
+                $this->status = array(
+                    'status_code' => $error_code,
+                    'message' => ""
+                );
+
+                $db->exec('rollback;');
+                return ;
+            }
         }
 
         if($ret) {
@@ -91,6 +114,11 @@ EOD;
                 'status_code' => 0,
                 'message' => ""
             );
+            $db->exec('commit;');
+            return ;
+        } else {
+                $db->exec('rollback;');
+                return ;
         }
 
     }

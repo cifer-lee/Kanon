@@ -51,7 +51,7 @@ $router->add_route('/api/controllers/:controller_id/buttons/:button_id/active', 
     ),
     array(
         'controller_id' => '[0-9]+',
-        'button_id' => '[0-9]+'
+        'button_id' => '[0-9a-zA-Z]+'
     )
 );
 

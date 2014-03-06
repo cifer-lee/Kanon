@@ -36,6 +36,7 @@ EOD;
 
     public function create_panel($panel) {
         $db =& Db::get_instance();
+        $db->exec('begin;');
 
         $source = <<<EOD
 insert into panels (name, type, map_uuid) values ('{$panel['name']}', {$panel['type']}, {$panel['map_uuid']});
@@ -48,6 +49,9 @@ EOD;
                 'status_code' => $error_code,
                 'message' => ''
             );
+
+            $db->exec('rollback;');
+            return ;
         }
 
         $panel_uuid = $db->lastInsertRowId();
@@ -65,6 +69,10 @@ EOD;
                 'status_code' => 0,
                 'message' => "{$panel_uuid}"
             );
+            $db->exec('commit;');
+        } else {
+            $db->exec('rollback;');
+            return ;
         }
     }
 
