@@ -176,7 +176,7 @@ EOD;
             return ;
         }
 
-        $msg = sprintf("C S%03s\n", $scene_uuid);
+        $msg = sprintf("C S%03s,,,,\n", $scene_uuid);
         socket_send($socket, $msg, strlen($msg), MSG_EOF);
     }
 
