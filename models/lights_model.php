@@ -21,7 +21,7 @@ class LightsModel extends Model {
 
         // there is only one map, so here restrict the map_uuid to 1
         $source = <<<EOD
-select uuid, name, type, rssi, online, bri, r, g, b, warm, map_uuid, loc_x, loc_y from lights where map_uuid = 1;
+select uuid, name, type, rssi, online, bri, r, g, b, bri2, warm, map_uuid, loc_x, loc_y from lights where map_uuid = 1;
 EOD;
         $res = $db->query($source);
 
@@ -30,7 +30,21 @@ EOD;
         }
 
         while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
-            $this->lights[] = $light;
+            $state = array(
+                'uuid' => $light['uuid'],
+                'type' => $light['type'],
+                'r' => $light['r'],
+                'g' => $light['g'],
+                'b' => $light['b'],
+                'bri' => $light['bri']
+            );
+
+            if($light['type'] == 2) {
+                $state['warm'] = $light['warm'];
+                $state['bri2'] = $light['bri2'];
+            }
+
+            $this->lights[] = $state;
         }
     }
 
@@ -39,12 +53,26 @@ EOD;
 
         // there is only one map, so here restrict the map_uuid to 1
         $source = <<<EOD
-select uuid, name, type, rssi, online, bri, r, g, b, warm, map_uuid, loc_x, loc_y from lights where map_uuid = 1 and loc_x = -1; 
+select uuid, name, type, rssi, online, bri, r, g, b, bri2, warm, map_uuid, loc_x, loc_y from lights where map_uuid = 1 and loc_x = -1; 
 EOD;
         $res = $db->query($source);
 
         while(($light = $res->fetchArray(SQLITE3_ASSOC))) {
-            $this->lights[] = $light;
+            $state = array(
+                'uuid' => $light['uuid'],
+                'type' => $light['type'],
+                'r' => $light['r'],
+                'g' => $light['g'],
+                'b' => $light['b'],
+                'bri' => $light['bri']
+            );
+
+            if($light['type'] == 2) {
+                $state['warm'] = $light['warm'];
+                $state['bri2'] = $light['bri2'];
+            }
+
+            $this->lights[] = $state;
         }
     }
 

@@ -32,6 +32,7 @@ class ScenesLightsModel extends Model {
 
             if($light['type'] == 2) {
                 $state['warm'] = $light['warm'];
+                $state['bri2'] = $light['bri2'];
             }
 
             $this->scenes_lights[] = $state;

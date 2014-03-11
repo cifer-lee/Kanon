@@ -20,12 +20,26 @@ class LightModel extends Model {
         $db =& Db::get_instance();
 
         $source = <<<EOD
-select uuid, name, type, rssi, online, bri, r, g, b, warm, map_uuid, loc_x, loc_y from lights where map_uuid = 1 and uuid = {$light_uuid};
+select uuid, name, type, rssi, online, bri, r, g, b, bri2, warm, map_uuid, loc_x, loc_y from lights where map_uuid = 1 and uuid = {$light_uuid};
 EOD;
         $res = $db->query($source);
 
         if(($light = $res->fetchArray(SQLITE3_ASSOC))) {
-            $this->light = $light;
+            $state = array(
+                'uuid' => $light['uuid'],
+                'type' => $light['type'],
+                'r' => $light['r'],
+                'g' => $light['g'],
+                'b' => $light['b'],
+                'bri' => $light['bri']
+            );
+
+            if($light['type'] == 2) {
+                $state['warm'] = $light['warm'];
+                $state['bri2'] = $light['bri2'];
+            }
+
+            $this->light = $state;
         }
     }
 
@@ -50,7 +64,7 @@ EOD;
             list($origin['b2'], $origin['g2'], $origin['r2']) = array_values(Utils::warm_convert($origin['warm']));
 
             $source = <<<EOD
-update lights set name='{$origin['name']}', bri={$origin['bri']}, r={$origin['r']}, g={$origin['g']}, b={$origin['b']}, r2={$origin['r2']}, g2={$origin['g2']}, b2={$origin['b2']}, warm={$origin['warm']}, loc_x={$origin['loc_x']}, loc_y={$origin['loc_y']} where map_uuid = 1 and uuid={$origin['uuid']};
+update lights set name='{$origin['name']}', bri={$origin['bri']}, r={$origin['r']}, g={$origin['g']}, b={$origin['b']}, r2={$origin['r2']}, g2={$origin['g2']}, b2={$origin['b2']}, bri2={$origin['bri2']}, warm={$origin['warm']}, loc_x={$origin['loc_x']}, loc_y={$origin['loc_y']} where map_uuid = 1 and uuid={$origin['uuid']};
 EOD;
 
             $db->exec($source);
@@ -77,7 +91,7 @@ EOD;
             $msg = "C {$origin['mac']},{$origin['r']},{$origin['g']},{$origin['b']},{$origin['bri']},1\n";
         } else {
             $msg = "C {$origin['mac']},{$origin['r']},{$origin['g']},{$origin['b']},{$origin['bri']},2\n";
-            $msg .= "C {$origin['mac']},{$origin['r2']},{$origin['g2']},{$origin['b2']},{$origin['bri']},1\n";
+            $msg .= "C {$origin['mac']},{$origin['r2']},{$origin['g2']},{$origin['b2']},{$origin['bri2']},1\n";
         }
         socket_send($socket, $msg, strlen($msg), MSG_EOF);
     }

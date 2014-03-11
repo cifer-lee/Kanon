@@ -80,14 +80,14 @@ class SceneModel extends Model {
                 $scene_light = array_merge($scene_light, $light);
 
                 $source = <<<EOD
-update scene_lights set r = {$scene_light['r']}, g = {$scene_light['g']}, b = {$scene_light['b']}, warm = {$scene_light['warm']}, r2 = {$scene_light['r2']}, g2 = {$scene_light['g2']}, b2 = {$scene_light['b2']}, bri = {$scene_light['bri']} where scene_uuid = {$scene['uuid']} and light_uuid = {$scene_light['uuid']};
+update scene_lights set r = {$scene_light['r']}, g = {$scene_light['g']}, b = {$scene_light['b']}, warm = {$scene_light['warm']}, r2 = {$scene_light['r2']}, g2 = {$scene_light['g2']}, b2 = {$scene_light['b2']}, bri = {$scene_light['bri']}, bri2 = {$scene_light['bri2']} where scene_uuid = {$scene['uuid']} and light_uuid = {$scene_light['uuid']};
 EOD;
             } else {
                 $source = '';
                 foreach($all_light_uuids as $value) {
                     if($value['uuid'] == $light['uuid']) {
                         $source = <<<EOD
-insert into scene_lights (scene_uuid, light_uuid, type, r, g, b, warm, r2, g2, b2, bri) values ({$scene['uuid']}, {$light['uuid']}, {$value['type']}, {$light['r']}, {$light['g']}, {$light['b']}, {$light['warm']}, {$light['r2']}, {$light['g2']}, {$light['b2']}, {$light['bri']});
+insert into scene_lights (scene_uuid, light_uuid, type, r, g, b, warm, r2, g2, b2, bri, bri2) values ({$scene['uuid']}, {$light['uuid']}, {$value['type']}, {$light['r']}, {$light['g']}, {$light['b']}, {$light['warm']}, {$light['r2']}, {$light['g2']}, {$light['b2']}, {$light['bri']}, {$light['bir2']});
 EOD;
                     }
                 }
