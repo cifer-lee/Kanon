@@ -56,24 +56,30 @@ EOD;
 
         $panel_uuid = $db->lastInsertRowId();
 
-        $source = 'insert into panel_buttons (button_id, panel_uuid, scene_uuid) values ';
+        /**
+         * 生产环境上的 sqlite 版本不支持 insert into _tablename_ (col1, col2) values (val1, val2),(val11, val12),(val22, val33)...
+         * 这种语法
+         */
         foreach($panel['buttons'] as $value) {
-            $source .= "('{$value}', {$panel_uuid}, 0),"; 
-        }
-        $source[strlen($source) - 1] = ';';
+            $source = "insert into panel_buttons (button_id, panel_uuid, scene_uuid) values ('{$value}', {$panel_uuid}, 0);";
 
-        $ret = $db->exec($source);
+            $ret = $db->exec($source);
 
-        if($ret) {
-            $this->status = array(
-                'status_code' => 0,
-                'message' => "{$panel_uuid}"
-            );
-            $db->exec('commit;');
-        } else {
-            $db->exec('rollback;');
-            return ;
+            if(! $ret) {
+                $this->status = array(
+                    'status_code' => 1,
+                    'message' => ""
+                );
+                $db->exec('rollback;');
+                return ;
+            }
         }
+
+        $this->status = array(
+            'status_code' => 0,
+            'message' => "{$panel_uuid}"
+        );
+        $db->exec('commit;');
     }
 
     public function get_status() {
