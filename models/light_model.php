@@ -31,7 +31,9 @@ EOD;
                 'r' => $light['r'],
                 'g' => $light['g'],
                 'b' => $light['b'],
-                'bri' => $light['bri']
+                'bri' => $light['bri'],
+                'loc_x' => $light['loc_x'],
+                'loc_y' => $light['loc_y']
             );
 
             if($light['type'] == 2) {
