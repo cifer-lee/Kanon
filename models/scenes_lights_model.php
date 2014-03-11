@@ -27,9 +27,7 @@ class ScenesLightsModel extends Model {
                 'r' => $light['r'],
                 'g' => $light['g'],
                 'b' => $light['b'],
-                'bri' => $light['bri'],
-                'loc_x' => $light['loc_x'],
-                'loc_y' => $light['loc_y']
+                'bri' => $light['bri']
             );
 
             if($light['type'] == 2) {
