@@ -1,5 +1,34 @@
 <?php
 
+/**
+ * Kanon --- A extremely light-weight PHP MVC framework
+ *
+ * @author      Cifer <mantianyu@gmail.com>
+ * @copyright   2014 Cifer
+ * @version     1.0
+ *
+ *  * MIT LICENSE
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 $router = new \Kanon\Router();
 
 $router->add_route('/', 'GET', array(
@@ -52,20 +81,6 @@ $router->add_route('/api/controllers/:controller_id/buttons/:button_id/active', 
     array(
         'controller_id' => '[0-9]+',
         'button_id' => '[0-9a-zA-Z]+'
-    )
-);
-
-$router->add_route('/api/bridge', 'GET', 
-    array(
-        'controller' => 'configuration',
-        'action' => 'get_configuration'
-    )
-);
-
-$router->add_route('/api/bridge/reset', 'POST', 
-    array(
-        'controller' => 'configuration',
-        'action' => 'configuration_reset'
     )
 );
 
@@ -146,110 +161,3 @@ $router->add_route('/api/lights/:light_uuid', 'DELETE',
         'light_uuid' => '[0-9]+'
     )
 );
-
-$router->add_route('/api/maps', 'GET',
-    array(
-        'controller' => 'maps',
-        'action' => 'maps_read'
-    )
-);
-
-$router->add_route('/api/maps/:map_uuid/lights', 'GET',
-    array(
-        'controller' => 'maps_lights',
-        'action' => 'maps_lights_read'
-    ),
-    array(
-        'map_uuid' => '[0-9]+'
-    )
-);
-
-$router->add_route('/api/maps/:map_uuid/lights/:light_uuid', 'GET',
-    array(
-        'controller' => 'maps_light',
-        'action' => 'maps_light_read'
-    ),
-    array(
-        'map_uuid' => '[0-9]+',
-        'light_uuid' => '[0-9]+'
-    )
-);
-
-$router->add_route('/api/maps/:map_uuid/lights/:light_uuid', 'PUT',
-    array(
-        'controller' => 'maps_light',
-        'action' => 'maps_light_update'
-    ),
-    array(
-        'map_uuid' => '[0-9]+',
-        'light_uuid' => '[0-9]+'
-    )
-);
-
-$router->add_route('/api/scenes', 'GET',
-    array(
-        'controller' => 'scenes',
-        'action' => 'scenes_read'
-    )
-);
-
-$router->add_route('/api/scenes', 'POST',
-    array(
-        'controller' => 'scenes',
-        'action' => 'create_scene'
-    )
-);
-
-$router->add_route('/api/scenes/:scene_uuid', 'GET',
-    array(
-        'controller' => 'scene',
-        'action' => 'scene_read'
-    ),
-    array(
-        'scene_uuid' => '[0-9]+'
-    )
-);
-
-$router->add_route('/api/scenes/:scene_uuid', 'PUT',
-    array(
-        'controller' => 'scene',
-        'action' => 'scene_update'
-    ),
-    array(
-        'scene_uuid' => '[0-9]+'
-    )
-);
-
-$router->add_route('/api/scenes/:scene_uuid', 'DELETE',
-    array(
-        'controller' => 'scene',
-        'action' => 'scene_remove'
-    ),
-    array(
-        'scene_uuid' => '[0-9]+'
-    )
-);
-
-$router->add_route('/api/scenes/:scene_uuid/on', 'POST',
-    array(
-        'controller' => 'scene',
-        'action' => 'scene_active'
-    ),
-    array(
-        'scene_uuid' => '[0-9]+'
-    )
-);
-
-$router->add_route('/api/scenes/:scene_uuid/lights', 'GET',
-    array(
-        'controller' => 'scenes_lights',
-        'action' => 'scenes_lights_read'
-    ),
-    array(
-        'scene_uuid' => '[0-9]+'
-    )
-);
-
-/*
- * lights and scenes are all in map
- */

@@ -1,6 +1,6 @@
 <?php
 
-class LightView extends View {
+class IndexView extends View {
     private $model;
 
     public function __construct($model) {
@@ -8,8 +8,7 @@ class LightView extends View {
     }
 
     public function render_get() {
-        $light = $this->model->get_light();
-        $source = json_encode($light);
+        $source = $this->model->get_status();
 
         echo $source;
     }

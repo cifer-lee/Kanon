@@ -33,8 +33,6 @@ require 'controller.php';
 require 'view.php';
 require 'model.php';
 require 'db.php';
-require 'socket.php';
-require 'utils.php';
 
 define ('HTTP_METHOD_GET', 'GET');
 define ('HTTP_METHOD_POST', 'POST');
