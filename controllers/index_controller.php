@@ -1,6 +1,6 @@
 <?php
 
-class IndexController extends Controller {
+class IndexController extends \Kanon\Controller {
     /**
      * @var _object_ The model correspond to this controller
      */

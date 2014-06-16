@@ -1,6 +1,6 @@
 <?php
 
-class IndexView extends View {
+class IndexView extends \Kanon\View {
     private $model;
 
     public function __construct($model) {

@@ -1,6 +1,6 @@
 <?php
 
-class IndexModel extends Model {
+class IndexModel extends \Kanon\Model {
     /**
      * @var string The status specifies whether operation was succeed.
      *  
