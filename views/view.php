@@ -34,8 +34,6 @@ namespace Kanon;
 abstract class View {
 
     public function render() {
-        header('Content-type: application/json');
-
         $args = func_get_args();
         $params = $args[0];
 

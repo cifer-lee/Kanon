@@ -25,8 +25,6 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR
 . VIEWS . PATH_SEPARATOR
 . MODELS . PATH_SEPARATOR
 . DB . PATH_SEPARATOR
-. SOCKET . PATH_SEPARATOR
-. UTILS . PATH_SEPARATOR
 . TEMPLATES);
 
 require 'controller.php';

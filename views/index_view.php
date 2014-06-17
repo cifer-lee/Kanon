@@ -8,9 +8,11 @@ class IndexView extends \Kanon\View {
     }
 
     public function render_get() {
-        $source = $this->model->get_status();
-
-        echo $source;
+        $status = $this->model->get_status();
+        
+        ob_start();
+        include 'index.tpl.php';
+        ob_get_flush();
     }
 
     public function render_put() {
