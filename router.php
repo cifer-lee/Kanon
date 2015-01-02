@@ -69,23 +69,24 @@ class Router {
             $pattern = $this->convert_url_pattern($pattern, ':', $args[3]);
         }
 
-        $pattern = '#^' . $pattern . '$#';
+        $pattern = '#^' . $pattern . '\.(json|xml)$#';
 
         $route = new \Kanon\Route($pattern, $method, $handler);
         $this->routes[] = $route;
     }
 
     /**
-     * Find a route, based on the http method and url pattern
-     *
-     * @param   source      string      The url
-     * @param   method      string      The HTTP method
+     * Find a route, based on the http method and url path component 
      *
      * @return  The route on success, NULL on failure
      */
-    public function find_route($source, $method) {
+    public function find_route() {
+        /* Find the route just using the URL_PATH component, don't need the query string component */
+        $url_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $http_method = $_SERVER['REQUEST_METHOD'];
+
         foreach ($this->routes as $route) {
-            if ($route->matches($source) && !strcasecmp($route->http_method(), $method)) {
+            if ($route->matches($url_path) && !strcasecmp($route->http_method(), $http_method)) {
                 return $route;
             }
         }

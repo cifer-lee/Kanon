@@ -35,3 +35,12 @@ $router->add_route('/', 'GET', array(
     'controller' => 'index',
     'action' => 'index')
 );
+
+$router->add_route('/foos/:foo_id', 'GET',
+    array(
+        'controller' => 'index',
+        'action' => 'index'),
+    array(
+        'foo_id' => '[0-9]+'
+    )
+);
