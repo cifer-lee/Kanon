@@ -77,9 +77,19 @@ class Route {
 
     public function matches($url) {
         if (preg_match($this->pattern, $url, $this->params)) {
-            /* 
-             * pop the first param which is the url passed in */
+            /** 
+             * pop the first param which is the url passed in 
+             */
             array_shift($this->params);
+
+            /**
+             * if not specify request format, default to json
+             */
+            if (! in_array('json', $this->params, false) &&
+                ! in_array('xml', $this->params, false)) {
+                    $this->params[] = 'json';
+                }
+
             return TRUE;
         }
     }
