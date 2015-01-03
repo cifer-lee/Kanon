@@ -122,6 +122,20 @@ class Route {
         $controller = new $controller_class_name($model);
         $view = new $view_class_name($model);
 
+        /**
+         * 将 $_GET 合并到 $this->params, 一并传给 controller 和 view
+         *
+         * 你可能会担心, 如此一来, 如果 querystring 里有数字命名的参数
+         * (比如 name=cifer&2=22)的话, array_merge 时这个数字会不会被 
+         * renumber, 不会的, 因为 $_GET 中的 key 都是字符串类型的, 即
+         * 使是数字. 而 $this->params 里面的 key 都是整数的.
+         *
+         * 另外, array_merge 时, $_GET 在前, $this->params 在后, 这个
+         * 顺序不要变, 因为请求格式在 $this->params 的最后, 在 view 里
+         * 我们需要将最后一个值 pop 出来以确定请求格式.
+         */
+        $this->params = array_merge($_GET, $this->params);
+
         $controller->{$this->action_name}($this->params);
         $view->{$this->renderer_name}($this->params);
     }

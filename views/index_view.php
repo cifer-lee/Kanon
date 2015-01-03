@@ -13,9 +13,7 @@ class IndexView extends \Kanon\View {
 
         $status = $this->model->get_status();
 
-        $request_fmt = array_pop($params);
-        echo $request_fmt;
-        exit;
+        print_r($params);
         
         ob_start();
         include 'index.tpl.php';
