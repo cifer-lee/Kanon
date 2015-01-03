@@ -33,13 +33,19 @@ $router = new \Kanon\Router();
 
 $router->add_route('/', 'GET', array(
     'controller' => 'index',
-    'action' => 'index')
+    'action' => 'index',
+    'renderer' => 'index')
 );
 
+/**
+ * action, method of controller to handler this request
+ * renderer, method of view to render result
+ */
 $router->add_route('/foos/:foo_id', 'GET',
     array(
         'controller' => 'index',
-        'action' => 'index'),
+        'action' => 'index',
+        'renderer' => 'index'),
     array(
         'foo_id' => '[0-9]+'
     )

@@ -62,7 +62,10 @@ class Router {
         $method = strtoupper($args[1]);
         $handler = $args[2];
 
-        $handler_default = array('controller' => 'index', 'action' => 'index');
+        /** 
+         * Set the default controller, action, and renderer
+         */
+        $handler_default = array('controller' => 'index', 'action' => 'index', 'renderer' => 'index');
         $handler = array_merge($handler_default, $handler);
 
         if(isset($args[3])) {

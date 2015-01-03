@@ -47,10 +47,17 @@ class Route {
      * @var string The route action in controller
      */
     private $action_name;
+
     /**
      * @var string The route view 
      */
     private $view_name;
+
+    /**
+     * \var string The route renderer name
+     */
+    private $renderer_name;
+
     /**
      * @var string The route model
      */
@@ -73,6 +80,7 @@ class Route {
         $this->view_name = $handler['controller'];
         $this->model_name = $handler['controller'];
         $this->action_name = $handler['action'];
+        $this->renderer_name = $handler['renderer'];
     }
 
     public function matches($url) {
@@ -115,7 +123,7 @@ class Route {
         $view = new $view_class_name($model);
 
         $controller->{$this->action_name}($this->params);
-        $view->render($this->params);
+        $view->{$this->renderer_name}($this->params);
     }
 
     public function underscore_to_camelcase($source) {

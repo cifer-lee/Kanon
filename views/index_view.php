@@ -7,8 +7,15 @@ class IndexView extends \Kanon\View {
         $this->model = $model;
     }
 
-    public function render_get() {
+    public function index() {
+        $args = func_get_args();
+        $params = $args[0];
+
         $status = $this->model->get_status();
+
+        $request_fmt = array_pop($params);
+        echo $request_fmt;
+        exit;
         
         ob_start();
         include 'index.tpl.php';
