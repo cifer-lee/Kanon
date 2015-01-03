@@ -14,9 +14,6 @@ class IndexModel extends \Kanon\Model {
       $this->status = $status;
     }
 
-    public function light_update($light) {
-    }
-
     /**
      * Used by LightsView to get the last operation's status
      *
