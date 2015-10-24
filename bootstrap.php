@@ -13,6 +13,7 @@ define('CONTROLLERS', ROOT . '/controllers');
 define('VIEWS', ROOT . '/views');
 define('MODELS', ROOT . '/models');
 define('TEMPLATES', ROOT . '/templates');
+define('LIBS', ROOT . '/libs');
 
 /**
  * Set include path
@@ -21,7 +22,8 @@ ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR
 . CONTROLLERS . PATH_SEPARATOR
 . VIEWS . PATH_SEPARATOR
 . MODELS . PATH_SEPARATOR
-. TEMPLATES);
+. TEMPLATES . PATH_SEPARATOR
+. LIBS);
 
 require 'controller.php';
 require 'view.php';
