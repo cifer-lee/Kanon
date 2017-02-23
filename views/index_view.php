@@ -8,7 +8,6 @@ class IndexView extends \Kanon\View {
     }
 
     public function index() {
-        /*
         $args = func_get_args();
         $params = $args[0];
 
@@ -17,7 +16,6 @@ class IndexView extends \Kanon\View {
         ob_start();
         include 'index.tpl.php';
         ob_get_flush();
-         */
     }
 
     public function render_put() {

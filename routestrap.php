@@ -37,6 +37,22 @@ $router->add_route('/', 'GET', array(
     'renderer' => 'index')
 );
 
+$router->add_route('/order/:timestamp', 'GET',
+    array(
+        'controller' => 'index',
+        'action' => 'get_order',
+        'renderer' => 'index'),
+    array(
+        'timestamp' => '[0-9]+'
+    )
+);
+
+$router->add_route('/index.php', 'GET', array(
+    'controller' => 'index',
+    'action' => 'index',
+    'renderer' => 'index')
+);
+
 /**
  * action, method of controller to handler this request
  * renderer, method of view to render result
