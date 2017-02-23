@@ -1,8 +1,25 @@
 Kanon
 =====
 
-这是我实现的一个非常轻量级的 MVC 框架, 是用 PHP 写的. 是的, 用 PHP 实现的 MVC 框架多得数不胜数, 那么为什么我还要写这个框架呢? 因为那些框架大都是一些综合性的 MVC 框架, 功能复杂代码量比较多, 并不能清晰的展现出一个通用框架的实现原理, 而且很多框架拿过来用时会发现学习这个框架本身都要花费不少的时间.
+Bitmain Hire Test --- PHP-exchange
 
-很多框架在 MVC 思想的基础上伸枝扩叶, 弄得它们本身并不是一个 MVC 框架, 而是包含了一个 MVC 框架. 然而, 更有一些框架, 他们连 "包含 MVC 框架" 都称不上, 因为它们实现 MVC 的那部分是完全曲解了 MVC 的设计思想. 几乎所有的框架都存在的一个误解是: _Controller_ 要做为 _Model_ 和 _View_ 交互的媒介, 基于这样的思想开发出来的 MVC 框架从一开始就不是 MVC 框架了.
+本测验直接基于我当年写的 Kanon 框架完成的, 总共大概花了 3 小时, 其中写后台代码大约 30 分钟, 剩下两个半小时在复习 JQuery, CSS 等前端知识, 以及各种费劲的调前端样式.
 
-没有对象关系映射 (ORM); 没有复杂的模板渲染机制 (实际上我展示了一个模板渲染实现的骨干, 所有模板渲染机制的实现其原理都是我所实现的那样); 没有 controller 处理请求前要进行的 filter, 这个框架展示了 MVC 最精炼的模样, 除了动态路由, 没有包含任何其它的杂质.
+## 运行说明
+
+经过分析, 后端采用 MongoDB 数据库存储下单队列和成交队列, 分别为 exchange.orders 和 exchange.matches.
+
+由于 PDO 并没有支持 MongoDB, 所以用 composer 下载了 MongoDB PHP Lib, 为方便起见我将 vendor/ 目录也提交了.
+
+执行 `php populate_roder.php` 这个脚本会在后台不断的生成随机的 order 信息填充 exchange.orders.
+
+部署环境是典型的 Nginx + PHP-FPM, 部署时需要注意的一点是, 我的 Kanon 框架的路由并不依赖于 PATH_INFO 而是依赖于 REQUEST_URI, 无需纠结 nginx 中 path_info 的配置问题:
+
+	location / {
+		#try_files $uri $uri/ =404;
+		try_files $uri $uri/ /index.php;
+    }
+
+部署好之后直接访问网站主页, 即可看到效果.
+
+网页采用 Bootstrap + JQuery. 用 Ajax 技术每隔 3s 向后端请求 order 信息和成交信息.

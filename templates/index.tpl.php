@@ -136,7 +136,7 @@
                     $(this).next().toggle();
                 });
 
-                if ($(".match-row").length > 60) {
+                if ($(".match-row").length > 30) {
                     $("#match").children().last().remove();
                     $("#match").children().last().remove();
                 }
