@@ -69,6 +69,7 @@ class IndexController extends \Kanon\Controller {
         $collection = $client->exchange->orders;
         $collection_matches = $client->exchange->matches;
 
+        if (0) {
         $asks = $collection->find(
             ['dir' => 0],
             ['sort' => ['price' => -1, 'id' => 1]]
@@ -129,6 +130,7 @@ class IndexController extends \Kanon\Controller {
                 'price' => $price,
                 'date' => time()
             ]);
+        }
         }
 
         $asks = $collection->find(
